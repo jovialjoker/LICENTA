@@ -1,0 +1,174 @@
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+    src: url("../public/fonts/OpenSans-Regular.woff") format('woff');
+}
+
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: url("../public/fonts/OpenSans-Italic.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: url("../public/fonts/OpenSans-LightItalic.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url("../public/fonts/OpenSans-Light.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    font-style: normal;
+    font-weight: normal;
+    src: url("../public/fonts/OpenSans_Condensed-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans SemiCondensed';
+    font-style: normal;
+    font-weight: normal;
+    src: url("../public/fonts/OpenSans_SemiCondensed-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: bold;
+    src: url("../public/fonts/Outfit-Bold.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: normal;
+    src: url("../public/fonts/Outfit-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: normal;
+    src: url("../public/fonts/Montserrat-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 200;
+    src: url("../public/fonts/Montserrat-Light.woff") format('woff');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: bold;
+    src: url("../public/fonts/Montserrat-Bold.woff") format('woff');
+}
+
+/* Colors used in Chakra theme */
+:root {
+    --lightPallette-text: "#030302";
+    --lightPallette-background-main: "#f8f6f2";
+    --lightPallette-background-50: "#f6f4ee";
+    --lightPallette-background-100: "#ede8de";
+    --lightPallette-background-200: "#dbd1bd";
+    --lightPallette-background-300: "#c9ba9c";
+    --lightPallette-background-400: "#b8a37a";
+    --lightPallette-background-500: "#a68c59";
+    --lightPallette-background-600: "#857047";
+    --lightPallette-background-700: "#635436";
+    --lightPallette-background-800: "#423824";
+    --lightPallette-background-900: "#211c12";
+    --lightPallette-primary-main: "#c5e2df";
+    --lightPallette-primary-50: "#eef6f6";
+    --lightPallette-primary-100: "#ddeeec";
+    --lightPallette-primary-200: "#bbddd9";
+    --lightPallette-primary-300: "#99ccc7";
+    --lightPallette-primary-400: "#77bbb4";
+    --lightPallette-primary-500: "#55aaa1";
+    --lightPallette-primary-600: "#448881";
+    --lightPallette-primary-700: "#336661";
+    --lightPallette-primary-800: "#224440";
+    --lightPallette-primary-900: "#112220";
+    --lightPallette-secondary-main: "#fff5d6";
+    --lightPallette-secondary-50: "#fff9e5";
+    --lightPallette-secondary-100: "#fff2cc";
+    --lightPallette-secondary-200: "#ffe699";
+    --lightPallette-secondary-300: "#ffd966";
+    --lightPallette-secondary-400: "#ffcc33";
+    --lightPallette-secondary-500: "#ffbf00";
+    --lightPallette-secondary-600: "#cc9900";
+    --lightPallette-secondary-700: "#997300";
+    --lightPallette-secondary-800: "#664d00";
+    --lightPallette-secondary-900: "#332600";
+    --lightPallette-accent-main: "#4b5a86";
+    --lightPallette-accent-50: "#eff0f6";
+    --lightPallette-accent-100: "#dee2ed";
+    --lightPallette-accent-200: "#bec5da";
+    --lightPallette-accent-300: "#9da8c8";
+    --lightPallette-accent-400: "#7c8bb6";
+    --lightPallette-accent-500: "#5c6ea3";
+    --lightPallette-accent-600: "#495883";
+    --lightPallette-accent-700: "#374262";
+    --lightPallette-accent-800: "#252c41";
+    --lightPallette-accent-900: "#121621";
+    --darkPallette-text: "#FDFDFC";
+    --darkPallette-background-main: "#0d0b07";
+    --darkPallette-background-50: "#f6f4ee";
+    --darkPallette-background-100: "#ede8de";
+    --darkPallette-background-200: "#dbd1bd";
+    --darkPallette-background-300: "#c9ba9c";
+    --darkPallette-background-400: "#b8a37a";
+    --darkPallette-background-500: "#a68c59";
+    --darkPallette-background-600: "#857047";
+    --darkPallette-background-700: "#635436";
+    --darkPallette-background-800: "#423824";
+    --darkPallette-background-900: "#211c12";
+    --darkPallette-primary-main: "#1d3a37";
+    --darkPallette-primary-50: "#eef6f6";
+    --darkPallette-primary-100: "#ddeeec";
+    --darkPallette-primary-200: "#bbddd9";
+    --darkPallette-primary-300: "#99ccc7";
+    --darkPallette-primary-400: "#77bbb4";
+    --darkPallette-primary-500: "#55aaa1";
+    --darkPallette-primary-600: "#448881";
+    --darkPallette-primary-700: "#336661";
+    --darkPallette-primary-800: "#224440";
+    --darkPallette-primary-900: "#112220";
+    --darkPallette-secondary-main: "#291f00";
+    --darkPallette-secondary-50: "#fff9e5";
+    --darkPallette-secondary-100: "#fff2cc";
+    --darkPallette-secondary-200: "#ffe699";
+    --darkPallette-secondary-300: "#ffd966";
+    --darkPallette-secondary-400: "#ffcc33";
+    --darkPallette-secondary-500: "#ffbf00";
+    --darkPallette-secondary-600: "#cc9900";
+    --darkPallette-secondary-700: "#997300";
+    --darkPallette-secondary-800: "#664d00";
+    --darkPallette-secondary-900: "#332600";
+    --darkPallette-accent-main: "#7988b4";
+    --darkPallette-accent-50: "#eff0f6";
+    --darkPallette-accent-100: "#dee2ed";
+    --darkPallette-accent-200: "#bec5da";
+    --darkPallette-accent-300: "#9da8c8";
+    --darkPallette-accent-400: "#7c8bb6";
+    --darkPallette-accent-500: "#5c6ea3";
+    --darkPallette-accent-600: "#495883";
+    --darkPallette-accent-700: "#374262";
+    --darkPallette-accent-800: "#252c41";
+    --darkPallette-accent-900: "#121621";
+  --white: "#FFF";
+ --black: "#000";
+}
