@@ -3,7 +3,7 @@ SETLOCAL ENABLEEXTENSIONS
 
 set DB_NAME=WorkoutBuddy
 set SQL_FILE=./wbMigration.sql
-set SERVER_NAME=(local)
+set SERVER_NAME=GEORGE\LOCALHOST
 
 echo Creating database %DB_NAME%...
 sqlcmd -S %SERVER_NAME% -E -Q "CREATE DATABASE [%DB_NAME%];"

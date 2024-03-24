@@ -1,22 +1,34 @@
-import React from "react";
-import { NativeBaseProvider, Box } from "native-base";
-import { LogBox } from "react-native";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeBaseProvider } from 'native-base';
+import React from 'react';
+import HomeScreen from './src/screens/HomeScreen';
+import MenuScreen from './src/screens/MenuScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-LogBox.ignoreLogs([
-  "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
-]);
+const App = () => {
+  const Tab = createBottomTabNavigator();
 
-export default function App() {
   return (
-    <NativeBaseProvider>
-      <Box
-        height={"100%"}
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
-        Hello world
-      </Box>
-    </NativeBaseProvider>
+    <SafeAreaProvider>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              headerShown: false, 
+            })}
+          >
+            <Tab.Screen
+              name="Home"
+              component={HomeScreen}
+            />
+            <Tab.Screen name="Menu" component={MenuScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </SafeAreaProvider>
   );
-}
+};
+
+export default App;
