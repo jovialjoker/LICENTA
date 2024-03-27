@@ -36,3 +36,26 @@ export interface IUnfinishedExercise {
   name: string;
   setsRecorded: number;
 }
+
+export interface IUserExerciseSet {
+  reps: number | null;
+  weight: number | null;
+  duration: number | null;
+  distance: number | null;
+}
+
+export interface IUserExerciseModel {
+  exerciseId: string;
+  exerciseName: string;
+  exerciseType: number;
+  sets: IUserExerciseSet[];
+  setsNo: number;
+}
+
+export interface IUserWorkoutModel {
+  userId: string;
+  date: string;
+  splitId: string;
+  workoutId: string;
+  exercises: IUserExerciseModel[];
+}

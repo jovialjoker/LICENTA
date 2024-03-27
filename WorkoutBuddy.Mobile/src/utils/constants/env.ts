@@ -1,5 +1,5 @@
 const env = {
-    NGROK_URL: 'https://4301-82-208-174-16.ngrok-free.app'
+    NGROK_URL: 'https://bbcc-82-76-86-236.ngrok-free.app'
 }
 
 export default env

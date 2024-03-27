@@ -8,5 +8,6 @@ export const endpoints = {
         ChangeCurrentSplit: "UserSplit/ChangeCurrentSplit",
         GetWorkoutsForProgress: "UserSplit/GetWorkoutsForProgress",
         GetUnfinishedWorkouts: "UserSplit/GetUnfinishedWorkouts",
+        GetUnfinishedProgressForWorkout: "UserSplit/GetUnfinishedProgressForWorkout",
     }
 }

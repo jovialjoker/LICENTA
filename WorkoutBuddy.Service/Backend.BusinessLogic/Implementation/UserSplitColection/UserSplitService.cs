@@ -558,6 +558,40 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             });
         }
 
+        public UserWorkoutModel GetUnfinishedProgressForWorkout(Guid workoutId, DateTime? date, Guid userId)
+        {
+            var workoutModel = PopulateUserWorkoutModel(workoutId);
+            if(date != null)
+            {
+                var userWorkout = UnitOfWork.UserWorkouts.Get()
+                                    .Include(uw => uw.UserExercises)
+                                        .ThenInclude(ue => ue.UserExerciseSets)
+                                    .FirstOrDefault(uw => uw.Idworkout == workoutId 
+                                                        && uw.Idsplit == workoutModel.SplitId 
+                                                        && uw.Date == date
+                                                        && uw.Iduser == userId);
+                
+                foreach(var userExercise in userWorkout.UserExercises)
+                {
+                    var sets = userExercise.UserExerciseSets.Select(ues => new SetModel
+                    {
+                        Reps = ues.RepsNo,
+                        Weight = ues.Weight,
+                        Duration = ues.Duration,
+                        Distance = ues.Distance
+                    }).ToList();
+
+                    var exercises = workoutModel.Exercises.Find(e => e.ExerciseId == userExercise.Idexercise);
+
+                    exercises.Sets = new List<SetModel>();
+                    exercises.Sets.AddRange(sets);
+                    exercises.SetsNo = sets.Count();
+                }
+            }
+            return workoutModel;
+        }
+
+
         private decimal ExercisesCoefficientCalculator(List<UserExerciseSet> sets, User? user)
         {
             var exerciseCoefficient = decimal.One;

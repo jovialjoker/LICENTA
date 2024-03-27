@@ -37,11 +37,27 @@ const App = () => {
             initialRouteName={isLoggedIn ? "HomeStack" : "Login"}
           >
             <Stack.Screen name="Login" component={AuthScreen} />
-            <Stack.Screen name="HomeStack" component={HomeStackNavigator}/>
-            <Stack.Screen name="ChangeSplit" component={ChangeSplitScreen} options={{ headerShown: true, title: "Change current split" }}/>
-            <Stack.Screen name="SelectWorkout" component={SelectWorkoutScreen} options={{ headerShown: true, title: "Select a workout" }}/>
-            <Stack.Screen name="ChooseAction" component={ChooseActionScreen} options={{ headerShown: true, title: "Choose action" }}/>
-            <Stack.Screen name="AddProgress" component={AddProgressScreen} options={{ headerShown: true, title: "Add progress" }}/>
+            <Stack.Screen name="HomeStack" component={HomeStackNavigator} />
+            <Stack.Screen
+              name="ChangeSplit"
+              component={ChangeSplitScreen}
+              options={{ headerShown: true, title: "Change current split" }}
+            />
+            <Stack.Screen
+              name="SelectWorkout"
+              component={SelectWorkoutScreen}
+              options={{ headerShown: true, title: "Select a workout" }}
+            />
+            <Stack.Screen
+              name="ChooseAction"
+              component={ChooseActionScreen}
+              options={{ headerShown: true, title: "Choose action" }}
+            />
+            <Stack.Screen
+              name="AddProgress"
+              component={AddProgressScreen}
+              options={{ headerShown: true, title: "Add progress" }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

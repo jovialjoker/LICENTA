@@ -3,9 +3,6 @@ using Backend.BusinessLogic.Implementation.UserSplitColection.Models;
 using Backend.WebApp.Code.Base;
 using Backend.WebApp.Code.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Web.Helpers;
 
 namespace Backend.WebApp.Controllers
 {
@@ -46,7 +43,7 @@ namespace Backend.WebApp.Controllers
         }
 
         [HttpPost("ChangeCurrentSplit")]
-        public async Task<IActionResult> ChangeCurrentSplit([FromBody]Guid splitId)
+        public async Task<IActionResult> ChangeCurrentSplit([FromBody] Guid splitId)
         {
             var idUser = CurrentUser.Id;
             await service.ChangeCurrentSplit(splitId, idUser);
@@ -54,7 +51,7 @@ namespace Backend.WebApp.Controllers
         }
 
         [HttpGet("GetSplit")]
-        public IActionResult ViewUserSplit([FromQuery]Guid id)
+        public IActionResult ViewUserSplit([FromQuery] Guid id)
         {
             var model = service.GetUserSplit(id, CurrentUser.Id);
             return Ok(model);
@@ -119,6 +116,13 @@ namespace Backend.WebApp.Controllers
         {
             service.RemoveSplit(id, CurrentUser.Id);
             return Ok();
+        }
+
+        [HttpGet("GetUnfinishedProgressForWorkout")]
+        public IActionResult GetUnfinishedProgressForWorkout([FromQuery]Guid workoutId, [FromQuery] DateTime? date)
+        {
+            var model = service.GetUnfinishedProgressForWorkout(workoutId, date, CurrentUser.Id);
+            return Ok(model);
         }
     }
 }
