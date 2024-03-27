@@ -1,18 +1,33 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
-import HomeScreen from "../screens/HomeScreen";
+import React, { useEffect } from "react";
+import HomeScreen from "../screens/Home/HomeScreen";
 import MenuScreen from "../screens/MenuScreen";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { HamburgerIcon } from "native-base";
+import HomeSvg from "../svgComponents/HomeSvg";
 
 const HomeStackNavigator = () => {
-  const Tab = createBottomTabNavigator();
+  const Tab = createMaterialBottomTabNavigator();
+
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Menu" component={MenuScreen} />
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color }) => <HomeSvg />,
+        }}
+      />
+      <Tab.Screen
+        name="Menu"
+        component={MenuScreen}
+        options={{
+          tabBarLabel: "Menu",
+          tabBarIcon: ({ color }) => (
+            <HamburgerIcon name="home" color={color} size={26} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

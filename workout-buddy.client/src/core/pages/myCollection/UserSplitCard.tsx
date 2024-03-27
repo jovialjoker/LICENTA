@@ -29,7 +29,7 @@ export default function UserSplitCard(props: IUserSplitCard) {
   //     try {
   //       await axios({
   //         method: "post",
-  //         url: `https://localhost:8082/Splits/delete`,
+  //         url: `https://localhost:7132/Splits/delete`,
   //         data: id,
   //         //   headers: {
   //         //     "Content-Type": "application/json",

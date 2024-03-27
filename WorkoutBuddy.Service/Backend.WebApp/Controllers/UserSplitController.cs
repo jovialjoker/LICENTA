@@ -30,6 +30,15 @@ namespace Backend.WebApp.Controllers
 
         }
 
+        [HttpGet("GetCurrentSplit")]
+        public IActionResult GetCurrentSplit()
+        {
+            var idUser = CurrentUser.Id;
+            var model = service.GetCurrentSplit(idUser);
+            return Ok(model);
+
+        }
+
         [HttpGet("GetSplit")]
         public IActionResult ViewUserSplit([FromQuery]Guid id)
         {

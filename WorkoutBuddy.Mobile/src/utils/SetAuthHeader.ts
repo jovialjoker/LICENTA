@@ -1,5 +1,7 @@
-function AuthHeader() {
-    const token = sessionStorage.getItem("token");
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+async function AuthHeader() {
+  let token = await AsyncStorage.getItem("token");
   
     if (token) {
       return `Bearer ${token}`;

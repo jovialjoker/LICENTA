@@ -120,7 +120,7 @@ function UserWeightProgress(props: any) {
   useEffect(() => {
     const getWeightHistory = async () => {
       let { data } = await axios.get(
-        "http://localhost:8082/UserAccount/GetWeightHistory",
+        "https://localhost:7132/UserAccount/GetWeightHistory",
         {
           headers: {
             "Content-Type": "application/json",
@@ -147,7 +147,7 @@ function UserWeightProgress(props: any) {
       ],
     }));
     axios.post(
-      "http://localhost:8082/UserAccount/AddToWeightHistory",
+      "https://localhost:7132/UserAccount/AddToWeightHistory",
       weightHistory,
       {
         headers: {

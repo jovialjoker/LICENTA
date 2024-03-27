@@ -62,7 +62,7 @@ export default function InsertExercise() {
     const getExercise = async () => {
       const { data } = await axios({
         method: "get",
-        url: `http://localhost:8082/Exercises/getExerciseForInsert?id=${
+        url: `https://localhost:7132/Exercises/getExerciseForInsert?id=${
           id ?? "00000000-0000-0000-0000-000000000000"
         }`,
         headers: {
@@ -105,7 +105,7 @@ export default function InsertExercise() {
     try {
       await axios({
         method: "post",
-        url: `http://localhost:8082/Exercises/insertExercise${querryString}`,
+        url: `https://localhost:7132/Exercises/insertExercise${querryString}`,
         data: formData,
         headers: {
           Authorization: AuthHeader(),
@@ -166,7 +166,7 @@ export default function InsertExercise() {
           />
         </FormControl>
         <FormControl color="black" isRequired>
-          <FormLabel >Exercise Types</FormLabel>
+          <FormLabel>Exercise Types</FormLabel>
           <Select
             value={exercise.selectedType}
             onChange={(e) => setExercise({ ...exercise, selectedType: e! })}

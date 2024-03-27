@@ -20,7 +20,7 @@ import env from "../../utils/constants/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AlertComponent from "./components/AlertComponent";
 
-const AuthScreen = ({navigation, route}) => {
+const AuthScreen = ({ navigation, route }) => {
   const [authObject, setAuthObject] = useState({} as IAuthObject);
   const [isSuccessful, setIsSuccesfull] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -34,9 +34,10 @@ const AuthScreen = ({navigation, route}) => {
       },
       body: JSON.stringify(authObject),
     });
+
     const data = await res.json();
 
-    if (data.status != 401) {
+    if (data.status != 401 && data.status != 400) {
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem(
         "currentUser",
@@ -45,25 +46,25 @@ const AuthScreen = ({navigation, route}) => {
           userId: data.userId,
         })
       );
-      setIsSuccesfull(true)
+
+      setIsSuccesfull(true);
       setShowAlert(true);
-      navigation.navigate("HomeStack")
-    } else if(data.erros){
-      setErrors([...Object.values(data.errors)])
+      navigation.navigate("HomeStack");
+    } else if (data.errors) {
+      setErrors([...Object.values(data.errors)]);
       setIsSuccesfull(false);
       setShowAlert(true);
-    }
-    else{
+    } else {
       setIsSuccesfull(false);
       setShowAlert(true);
-      setErrors(["This email/password combination doesn't exist"])
+      setErrors(["This email/password combination doesn't exist"]);
     }
   };
 
   const changeHandler = (key: string, value: string) => {
-    setShowAlert(false)
-    setAuthObject({...authObject, [key]: value})
-  }
+    setShowAlert(false);
+    setAuthObject({ ...authObject, [key]: value });
+  };
 
   return (
     <Center w="100%" h="100%" bgColor={"#F1F2EB"}>
@@ -95,9 +96,7 @@ const AuthScreen = ({navigation, route}) => {
             <FormControl.Label>Email</FormControl.Label>
             <Input
               value={authObject.email}
-              onChangeText={(text: string) =>
-                changeHandler('email', text)
-              }
+              onChangeText={(text: string) => changeHandler("email", text)}
             />
           </FormControl>
           <FormControl>
@@ -105,9 +104,7 @@ const AuthScreen = ({navigation, route}) => {
             <Input
               type="password"
               value={authObject.password}
-              onChangeText={(text: string) =>
-                changeHandler('password', text)
-              }
+              onChangeText={(text: string) => changeHandler("password", text)}
             />
           </FormControl>
           <Button mt="2" bgColor="#A4C2A5" onPress={submitHandler}>

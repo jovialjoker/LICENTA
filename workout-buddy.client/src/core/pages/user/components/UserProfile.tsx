@@ -25,7 +25,7 @@ function UserProfile(props: any) {
     props.setLoading(true);
     try {
       await axios.post(
-        "http://localhost:8082/UserAccount/editProfile",
+        "https://localhost:7132/UserAccount/editProfile",
         {
           username: props.user.username,
           name: props.user.name,

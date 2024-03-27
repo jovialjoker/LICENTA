@@ -36,7 +36,7 @@ export default function Login() {
     try {
       const res = await axios({
         method: "post",
-        url: "http://localhost:8082/UserAccount/login",
+        url: "https://localhost:7132/UserAccount/login",
         data: loginModel,
       });
       dispatcher(accountActions.login(res.data));

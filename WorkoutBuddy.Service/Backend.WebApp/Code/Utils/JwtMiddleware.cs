@@ -22,7 +22,7 @@ namespace Backend.WebApp.Code.Utils
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-            if (token != null)
+           if (token != null)
             {
                 var newContext = attachUserToContext(context, userService, token);
                 await _next(newContext);

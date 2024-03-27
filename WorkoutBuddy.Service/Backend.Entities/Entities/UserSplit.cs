@@ -13,6 +13,7 @@ namespace Backend.Entities
         public Guid Iduser { get; set; }
         public Guid Idsplit { get; set; }
         public int? Rating { get; set; }
+        public Boolean? isCurrentSplit { get; set; }
 
         public virtual Split IdsplitNavigation { get; set; } = null!;
         public virtual User IduserNavigation { get; set; } = null!;

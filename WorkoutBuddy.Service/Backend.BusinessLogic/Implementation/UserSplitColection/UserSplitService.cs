@@ -44,6 +44,20 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             return userSplitsList;
         }
 
+        public UserSplitListItem GetCurrentSplit(Guid idUser)
+        {
+            var user = UnitOfWork.Users.Get()
+                .Include(u => u.UserSplits)
+                    .ThenInclude(us => us.UserWorkouts)
+                .Include(u => u.UserSplits)
+                    .ThenInclude(us => us.IdsplitNavigation)
+                        .ThenInclude(s => s.Workouts)
+                .SingleOrDefault(u => u.Iduser == idUser);
+
+            var currentSplit = user.UserSplits.FirstOrDefault(us => us.isCurrentSplit == true);
+            return Mapper.Map<UserSplit, UserSplitListItem>(currentSplit);
+        }
+
         public UserSplitModel GetUserSplit(Guid splitId, Guid userId)
         {
             var split = UnitOfWork.UserSplits.Get()

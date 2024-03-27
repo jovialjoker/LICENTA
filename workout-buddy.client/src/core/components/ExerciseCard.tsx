@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Card, CardHeader, CardBody, Heading, Button, Flex } from "@chakra-ui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Button,
+  Flex,
+} from "@chakra-ui/react";
 import AuthHeader from "../../utils/authorizationHeaders";
 import axios from "axios";
 
@@ -9,7 +16,7 @@ export const ExerciseCard = ({ exercise }: { exercise: any }) => {
   async function approveHandler() {
     setTriggerRemove(!triggerRemove);
     await axios.post(
-      `http://localhost:8082/Exercises/approve`,
+      `https://localhost:7132/Exercises/approve`,
       exercise.exerciseId,
       {
         headers: {
@@ -23,7 +30,7 @@ export const ExerciseCard = ({ exercise }: { exercise: any }) => {
   async function deleteHandler() {
     setTriggerRemove(!triggerRemove);
     await axios.post(
-      `http://localhost:8082/Exercises/reject`,
+      `https://localhost:7132/Exercises/reject`,
       exercise.exerciseId,
       {
         headers: {
@@ -39,13 +46,18 @@ export const ExerciseCard = ({ exercise }: { exercise: any }) => {
       {!triggerRemove && (
         <Card sx={{ maxWidth: 345 }} padding={"3"}>
           <CardHeader
-          border={"1px solid #eaeaea"}
+            border={"1px solid #eaeaea"}
             as="img"
             height="140"
-            src={`http://localhost:8082/Image/getImageById?id=${exercise.idImage}`}
+            src={`https://localhost:7132/Image/getImageById?id=${exercise.idImage}`}
             alt={exercise.name}
           />
-          <CardBody display={"flex"} flexDir="column" alignItems={"center"} justifyContent={"center"}>
+          <CardBody
+            display={"flex"}
+            flexDir="column"
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
             <Heading size="md" as="div">
               Name of exercise: {exercise.name}
             </Heading>
@@ -53,16 +65,10 @@ export const ExerciseCard = ({ exercise }: { exercise: any }) => {
               Type of exercise: {exercise.exerciseType}
             </Heading>
             <Flex marginTop="3" justifyContent={"space-between"} width={"70%"}>
-              <Button
-                color="secondary"
-                onClick={approveHandler}
-              >
+              <Button color="secondary" onClick={approveHandler}>
                 Accept
               </Button>
-              <Button
-                bgColor="red.400"
-                onClick={deleteHandler}
-              >
+              <Button bgColor="red.400" onClick={deleteHandler}>
                 Delete
               </Button>
             </Flex>

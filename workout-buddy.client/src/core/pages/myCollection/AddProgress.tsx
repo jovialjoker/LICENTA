@@ -17,11 +17,11 @@ import { getURLID } from "../../../utils/URLUtils";
 import UserExerciseComponent from "./UserExerciseComponent";
 import useColors from "../splits/colors";
 
-export interface IProgressSet{
-    reps: number | null;
-    weight: number| null;
-    duration: number| null;
-    distance: number| null;
+export interface IProgressSet {
+  reps: number | null;
+  weight: number | null;
+  duration: number | null;
+  distance: number | null;
 }
 
 export interface IProgressExercises {
@@ -50,7 +50,7 @@ const workoutInitialState: IProgress = {
 
 const AddProgress = () => {
   const [progressModel, setProgressModel] = useState(workoutInitialState);
-  const colors = useColors()
+  const colors = useColors();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const AddProgress = () => {
     const getExercise = async () => {
       const { data } = await axios({
         method: "get",
-        url: `http://localhost:8082/UserSplit/AddProgress?id=${id}`,
+        url: `https://localhost:7132/UserSplit/AddProgress?id=${id}`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -71,24 +71,26 @@ const AddProgress = () => {
   }, []);
 
   const changeHandler = (exercise: IProgressExercises) => {
-    const index = progressModel.exercises.findIndex(e => e.exerciseId === exercise.exerciseId)
-    progressModel.exercises[index] = exercise
-    setProgressModel(progressModel)
-  }
+    const index = progressModel.exercises.findIndex(
+      (e) => e.exerciseId === exercise.exerciseId
+    );
+    progressModel.exercises[index] = exercise;
+    setProgressModel(progressModel);
+  };
 
   const submitHandler = async (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios({
-        method: "post",
-        url: `http://localhost:8082/UserSplit/AddProgress`,
-        data: progressModel,
-        headers: {
-          Authorization: AuthHeader(),
-        },
-      });
+      method: "post",
+      url: `https://localhost:7132/UserSplit/AddProgress`,
+      data: progressModel,
+      headers: {
+        Authorization: AuthHeader(),
+      },
+    });
 
     navigate("/exercises");
-  }
+  };
 
   return (
     <Flex
