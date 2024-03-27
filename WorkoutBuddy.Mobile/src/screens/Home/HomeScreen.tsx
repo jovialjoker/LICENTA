@@ -17,22 +17,17 @@ import { Carousel } from "react-native-basic-carousel";
 import CircularProgress from "react-native-circular-progress-indicator";
 import FeatureList from "./components/FeatureList";
 import { ISplitListItem } from "../../interfaces/Split";
+import { endpoints } from "../../utils/constants/endpoints";
 
 export default function HomeScreen({ navigation, route }) {
-  const [currentUser, setCurrentUser] = useState("");
-  const [splitsList, setSplitsList] = useState([]);
   const [currentSplit, setCurrentSplit] = useState({} as ISplitListItem);
 
   useEffect(() => {
     const getValues = async () => {
-      let currentUser = await AsyncStorage.getItem("currentUser");
-      setCurrentUser(JSON.parse(currentUser).username);
-
-      const endpoint = "UserSplit/GetCurrentSplit";
       let authHeader = await AuthHeader();
       const { data } = await axios({
         method: "get",
-        url: `${env.NGROK_URL}/${endpoint}`,
+        url: `${env.NGROK_URL}/${endpoints.UserSplit.GetCurrentSplit}`,
         headers: {
           Authorization: authHeader,
         },
@@ -40,7 +35,7 @@ export default function HomeScreen({ navigation, route }) {
       setCurrentSplit(data);
     };
     getValues();
-  }, []);
+  }, [route.params?.refreshFlag]);
 
   return (
     <Flex w="100%">
@@ -58,9 +53,10 @@ export default function HomeScreen({ navigation, route }) {
             borderRadius={"full"}
             size={"lg"}
             _pressed={{ bgColor: "#e0c598" }}
+            onPress={() => navigation.navigate("ChooseAction")}
           >
             <Heading color="black" textAlign={"center"}>
-              Start workout
+              Add progress
             </Heading>
           </Button>
         </Flex>
@@ -74,7 +70,6 @@ export default function HomeScreen({ navigation, route }) {
         pt="5"
         px="5"
       >
-        {currentSplit && (
           <FeatureList
             navigation={navigation}
             currentSplit={currentSplit}
@@ -93,7 +88,6 @@ export default function HomeScreen({ navigation, route }) {
               },
             ]}
           />
-        )}
       </ScrollView>
     </Flex>
   );

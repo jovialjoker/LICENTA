@@ -19,6 +19,7 @@ import IAuthObject from "./interfaces/IAuthObject";
 import env from "../../utils/constants/env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AlertComponent from "./components/AlertComponent";
+import { endpoints } from "../../utils/constants/endpoints";
 
 const AuthScreen = ({ navigation, route }) => {
   const [authObject, setAuthObject] = useState({} as IAuthObject);
@@ -27,7 +28,7 @@ const AuthScreen = ({ navigation, route }) => {
   const [errors, setErrors] = useState([] as string[]);
 
   const submitHandler = async () => {
-    const res = await fetch(`${env.NGROK_URL}/UserAccount/login`, {
+    const res = await fetch(`${env.NGROK_URL}/${endpoints.User.Login}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

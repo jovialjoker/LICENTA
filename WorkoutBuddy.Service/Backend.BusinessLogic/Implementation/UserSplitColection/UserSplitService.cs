@@ -1,5 +1,7 @@
 ﻿using Backend.BusinessLogic.Base;
+using Backend.BusinessLogic.Implementation.UserSplitColection.MobileModels;
 using Backend.BusinessLogic.Implementation.UserSplitColection.Models;
+using Backend.BusinessLogic.Splits;
 using Backend.Common.Exceptions;
 using Backend.Common.Extensions;
 using Backend.Entities;
@@ -58,6 +60,81 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             return Mapper.Map<UserSplit, UserSplitListItem>(currentSplit);
         }
 
+        public List<UnfinishedWorkoutListItem> GetUnfinishedWorkouts(Guid userId)
+        {
+            var split = UnitOfWork.UserSplits.Get()
+                        .Include(us => us.UserWorkouts)
+                            .ThenInclude(uw => uw.UserExercises)
+                                .ThenInclude(ue => ue.UserExerciseSets)
+                        .Include(us => us.UserWorkouts)
+                            .ThenInclude(uw => uw.IdNavigation)
+                                .ThenInclude(w => w.WorkoutExercises)
+                                    .ThenInclude(we => we.IdexerciseNavigation)
+                        .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+            
+            if(split == null)
+            {
+                throw new NotFoundErrorException();
+            }
+
+            var unfinishedWorkouts = new List<UnfinishedWorkoutListItem>();
+
+            var workouts = split.UserWorkouts
+                        .Where(us => us.IsFinished != true)
+                        .ToList();
+
+            if(workouts.Count == 0)
+            {
+                return unfinishedWorkouts;
+            }
+
+            foreach(var userWorkout in workouts)
+            {
+                var workoutModel = Mapper.Map<UserWorkout, UnfinishedWorkoutListItem>(userWorkout);
+
+                var workoutExercisesId = userWorkout.UserExercises
+                                            .Select(ue => ue.Idexercise)
+                                            .ToList();
+
+                var exercisesContained = UnitOfWork.Exercises.Get()
+                                        .Where(e => workoutExercisesId.Contains(e.Idexercise))
+                                        .ToList();
+
+                var exercises = userWorkout.UserExercises
+                                .Select(ue => new UnfinishedExerciseListItem
+                                {
+                                    ExerciseId = ue.Idexercise,
+                                    SetsRecorded = ue.UserExerciseSets.Count,
+                                    Name = exercisesContained.FirstOrDefault(e => e.Idexercise == ue.Idexercise).Name
+                                })
+                                .ToList();
+
+                workoutModel.Exercises = exercises;
+                unfinishedWorkouts.Add(workoutModel);
+            }
+
+            return unfinishedWorkouts;
+        }
+
+        public async Task ChangeCurrentSplit(Guid splitId, Guid userId)
+        {
+            var prevCurrentSplit = UnitOfWork.UserSplits.Get()
+                                    .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+            if (prevCurrentSplit != null) 
+            { 
+                prevCurrentSplit.isCurrentSplit = false;
+                UnitOfWork.UserSplits.Update(prevCurrentSplit);
+            }
+
+            var userSplit = await UnitOfWork.UserSplits.Get()
+                            .FirstAsync(u => u.Iduser == userId && u.Idsplit == splitId);
+
+            userSplit.isCurrentSplit = true;
+            UnitOfWork.UserSplits.Update(userSplit);
+
+            UnitOfWork.SaveChanges();
+        }
+
         public UserSplitModel GetUserSplit(Guid splitId, Guid userId)
         {
             var split = UnitOfWork.UserSplits.Get()
@@ -79,6 +156,43 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             }
 
             return userSplit;
+        }
+
+        public List<MobileWorkoutListItem> GetWorkoutsForProgress(Guid userId) 
+        {
+            var split = UnitOfWork.UserSplits.Get()
+                        .Include(us => us.IdsplitNavigation)
+                            .ThenInclude(s => s.Workouts)
+                                .ThenInclude(s => s.WorkoutExercises)
+                                    .ThenInclude(s => s.IdexerciseNavigation)
+                        .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+
+            if (split == null)
+            {
+                throw new NotFoundErrorException();
+            }
+
+            var workoutsList = new List<MobileWorkoutListItem>();
+
+
+            foreach (var workout in split.IdsplitNavigation.Workouts)
+            {
+                var formatedWorkout = Mapper.Map<Workout, MobileWorkoutListItem>(workout);
+
+                var exercises = workout.WorkoutExercises
+                                        .Select(we => we.IdexerciseNavigation)
+                                        .Select(e => new MobileExerciseListItem()
+                                        {
+                                            ExerciseId = e.Idexercise,
+                                            Name = e.Name
+                                        })
+                                        .ToList();
+
+                formatedWorkout.Exercises = exercises;
+                workoutsList.Add(formatedWorkout);
+            }
+
+            return workoutsList;
         }
 
         public UserWorkoutModel PopulateUserWorkoutModel(Guid id)

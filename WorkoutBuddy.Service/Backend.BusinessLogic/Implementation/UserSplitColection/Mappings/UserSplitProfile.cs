@@ -2,6 +2,7 @@
 using System;
 using Backend.BusinessLogic.Implementation.UserSplitColection.Models;
 using Backend.Entities;
+using Backend.BusinessLogic.Implementation.UserSplitColection.MobileModels;
 
 namespace Backend.BusinessLogic.Implementation.UserSplitColection
 {
@@ -13,6 +14,7 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
                 .ForMember(a => a.SplitId, a => a.MapFrom(s => s.Idsplit))
                 .ForMember(a => a.Name, a => a.MapFrom(s => s.IdsplitNavigation.Name))
                 .ForMember(a => a.Description, a => a.MapFrom(s => s.IdsplitNavigation.Description))
+                .ForMember(a => a.isCurrentSplit, a => a.MapFrom(s => s.isCurrentSplit))
                 .ForMember(a => a.WorkoutsNo, a => a.MapFrom(s => s.IdsplitNavigation.Workouts.Count));
 
             CreateMap<UserSplit, UserSplitModel>()
@@ -102,6 +104,17 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
                 .ForMember(a => a.IdexerciseNavigation, a => a.MapFrom(s => s.Id.IdexerciseNavigation))
                 .ForMember(a => a.Idpr, a => a.MapFrom(s => Guid.NewGuid()))
                 .ForMember(a => a.IduserNavigation, a => a.Ignore());
+
+            CreateMap<Workout, MobileWorkoutListItem>()
+                .ForMember(a => a.WorkoutId, a => a.MapFrom(s => s.Idworkout))
+                .ForMember(a => a.Name, a => a.MapFrom(s => s.Name))
+                .ForMember(a => a.Exercises, a => a.Ignore());
+
+            CreateMap<UserWorkout, UnfinishedWorkoutListItem>()
+                .ForMember(a => a.WorkoutId, a => a.MapFrom(s => s.Idworkout))
+                .ForMember(a => a.Name, a => a.MapFrom(s => s.IdNavigation.Name))
+                .ForMember(a => a.Date, a => a.MapFrom(s => s.Date))
+                .ForMember(a => a.Exercises, a => a.Ignore());
         }
     }
 }

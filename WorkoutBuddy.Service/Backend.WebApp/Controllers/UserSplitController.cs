@@ -36,13 +36,34 @@ namespace Backend.WebApp.Controllers
             var idUser = CurrentUser.Id;
             var model = service.GetCurrentSplit(idUser);
             return Ok(model);
+        }
 
+        [HttpGet("GetUnfinishedWorkouts")]
+        public IActionResult GetUnfinishedWorkouts()
+        {
+            var model = service.GetUnfinishedWorkouts(CurrentUser.Id);
+            return Ok(model);
+        }
+
+        [HttpPost("ChangeCurrentSplit")]
+        public async Task<IActionResult> ChangeCurrentSplit([FromBody]Guid splitId)
+        {
+            var idUser = CurrentUser.Id;
+            await service.ChangeCurrentSplit(splitId, idUser);
+            return Ok();
         }
 
         [HttpGet("GetSplit")]
         public IActionResult ViewUserSplit([FromQuery]Guid id)
         {
             var model = service.GetUserSplit(id, CurrentUser.Id);
+            return Ok(model);
+        }
+
+        [HttpGet("GetWorkoutsForProgress")]
+        public IActionResult GetWorkoutsForProgress()
+        {
+            var model = service.GetWorkoutsForProgress(CurrentUser.Id);
             return Ok(model);
         }
 

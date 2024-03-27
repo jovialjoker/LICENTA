@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import HomeScreen from "../screens/Home/HomeScreen";
-import MenuScreen from "../screens/MenuScreen";
+import MenuScreen from "../screens/Home/MenuScreen";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { HamburgerIcon } from "native-base";
 import HomeSvg from "../svgComponents/HomeSvg";

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Divider, Button, Text } from "native-base";
+import { Box, Flex, Heading, Divider, Button, Text, Center } from "native-base";
 import React from "react";
 import { Carousel } from "react-native-basic-carousel";
 import CircularProgress from "react-native-circular-progress-indicator";
@@ -35,37 +35,43 @@ export default function FeatureList({
             borderRadius={"xl"}
             _pressed={{ bgColor: "#e0c598" }}
           >
-            <Text>Change the current split</Text>
+            <Text>{currentSplit ? "Change the current split" : "Select split"}</Text>
           </Button>
         </Flex>
-        <Flex marginX={"auto"} width={"70%"} mt="5">
-          <Flex alignItems={"center"}>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              bgColor={"#DCA950"}
-              w={"100%"}
-              borderTopRadius={"3xl"}
-              p="3"
-            >
-              <Heading>{currentSplit.name}</Heading>
-            </Flex>
-            <Divider></Divider>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              bgColor={"white"}
-              w={"100%"}
-              borderBottomRadius={"3xl"}
-              p="3"
-            >
-              <Text italic>{currentSplit.description}</Text>
-              <Text>
-                Workouts no: <Text bold>{currentSplit.workoutsNo}</Text>
-              </Text>
+        {currentSplit ? (
+          <Flex marginX={"auto"} width={"70%"} mt="5">
+            <Flex alignItems={"center"}>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                bgColor={"#DCA950"}
+                w={"100%"}
+                borderTopRadius={"3xl"}
+                p="3"
+              >
+                <Heading>{currentSplit.name}</Heading>
+              </Flex>
+              <Divider></Divider>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                bgColor={"white"}
+                w={"100%"}
+                borderBottomRadius={"3xl"}
+                p="3"
+              >
+                <Text italic>{currentSplit.description}</Text>
+                <Text>
+                  Workouts no: <Text bold>{currentSplit.workoutsNo}</Text>
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
+        ) : (
+          <Center h="20">
+            <Text>No selected split</Text>
+          </Center>
+        )}
       </Flex>
       <Divider></Divider>
       <Flex mt="5">
