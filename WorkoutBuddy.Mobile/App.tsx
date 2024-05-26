@@ -12,6 +12,7 @@ import ChangeSplitScreen from "./src/screens/Home/ChangeCurrentSplit/ChangeSplit
 import SelectWorkoutScreen from "./src/screens/Workout/SelectWorkout/SelectWorkoutScreen";
 import AddProgressScreen from "./src/screens/Workout/AddProgress/AddProgressScreen";
 import ChooseActionScreen from "./src/screens/Workout/ChooseAction/ChooseActionScreen";
+import env from "./src/utils/constants/env";
 
 LogBox.ignoreAllLogs();
 const App = () => {
@@ -20,8 +21,15 @@ const App = () => {
 
   React.useEffect(() => {
     const getValues = async () => {
-      let currentUser = await AsyncStorage.getItem("currentUser");
-      setIsLoggedIn(!!JSON.parse(currentUser));
+      let ngrokURL = await AsyncStorage.getItem("ngrokURL");
+      if (ngrokURL == env.NGROK_URL) {
+        let currentUser = await AsyncStorage.getItem("currentUser");
+        setIsLoggedIn(!!JSON.parse(currentUser));
+      } else {
+        await AsyncStorage.setItem("ngrokURL", env.NGROK_URL);
+        await AsyncStorage.setItem("currentUser", "{}");
+        setIsLoggedIn(false);
+      }
     };
     getValues();
   }, []);

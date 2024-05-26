@@ -10,11 +10,13 @@ import React from "react";
 import {
   IUnfinishedExercise,
   IUnfinishedWorkout,
+  IUserExerciseModel,
+  IUserWorkoutModel,
 } from "../../../../interfaces/Split";
 import { formatDate } from "../../../../utils/FormatUtils";
 
 interface IUnfinishedWorkoutListItem {
-  workout: IUnfinishedWorkout;
+  workout: IUserWorkoutModel;
   navigation: any;
 }
 
@@ -64,7 +66,7 @@ const UnfinishedWorkoutListItem = ({
                 borderTopRadius={"3xl"}
                 p="3"
               >
-                <Heading>{workout.name}</Heading>
+                <Heading>Date: {formatDate(workout.date)}</Heading>
               </Flex>
               <Divider></Divider>
               <Flex
@@ -74,14 +76,13 @@ const UnfinishedWorkoutListItem = ({
                 borderBottomRadius={"3xl"}
                 p="3"
               >
-                <Text italic>Date: {formatDate(workout.date)}</Text>
                 <Text>Recorded sets:</Text>
                 <Flex p="2">
-                  {workout.exercises.map((ex: IUnfinishedExercise) => (
+                  {workout.exercises.map((ex: IUserExerciseModel) => (
                     <Flex flexDir={"row"} alignItems={"center"}>
                       <ChevronRightIcon color="#4E81D9" />
                       <Text>
-                        {ex.name}: {ex.setsRecorded} sets
+                        {ex.exerciseName}: {ex.sets.length} sets
                       </Text>
                     </Flex>
                   ))}

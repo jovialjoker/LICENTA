@@ -37,6 +37,14 @@ export interface IUnfinishedExercise {
   setsRecorded: number;
 }
 
+export interface IFormSet {
+  id: string;
+  reps: number | null;
+  weight: number | null;
+  duration: number | null;
+  distance: number | null;
+}
+
 export interface IUserExerciseSet {
   reps: number | null;
   weight: number | null;

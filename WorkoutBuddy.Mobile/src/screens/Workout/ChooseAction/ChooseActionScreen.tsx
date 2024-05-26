@@ -1,11 +1,24 @@
-import { Button, Center, Divider, Flex, Heading, ScrollView, Text } from "native-base";
+import {
+  Button,
+  Center,
+  Divider,
+  Flex,
+  Heading,
+  ScrollView,
+  Text,
+} from "native-base";
 import React, { useEffect, useState } from "react";
 import AuthHeader from "../../../utils/SetAuthHeader";
 import axios from "axios";
 import { endpoints } from "../../../utils/constants/endpoints";
 import env from "../../../utils/constants/env";
-import { IUnfinishedWorkout } from "../../../interfaces/Split";
+import {
+  IUnfinishedWorkout,
+  IUserExerciseModel,
+  IUserWorkoutModel,
+} from "../../../interfaces/Split";
 import UnfinishedWorkoutListItem from "./components/UnfinishedWorkoutListItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChooseActionScreen = ({ navigation, route }) => {
   const [unfinishedWorkouts, setUnfinishedWorkouts] = useState<
@@ -14,15 +27,9 @@ const ChooseActionScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     const getValues = async () => {
-      let authHeader = await AuthHeader();
-      const { data } = await axios({
-        method: "get",
-        url: `${env.NGROK_URL}/${endpoints.UserSplit.GetUnfinishedWorkouts}`,
-        headers: {
-          Authorization: authHeader,
-        },
-      });
-      setUnfinishedWorkouts(data);
+      let unfinishedWorkouts =
+        (await AsyncStorage.getItem("unfinished")) ?? "[]";
+      setUnfinishedWorkouts(JSON.parse(unfinishedWorkouts));
     };
     getValues();
   }, []);
@@ -43,7 +50,7 @@ const ChooseActionScreen = ({ navigation, route }) => {
         <Heading>Your unfinished workouts:</Heading>
         {unfinishedWorkouts && unfinishedWorkouts.length > 0 ? (
           <ScrollView>
-            {unfinishedWorkouts.map((workout: IUnfinishedWorkout) => (
+            {unfinishedWorkouts.map((workout: IUserWorkoutModel) => (
               <UnfinishedWorkoutListItem
                 workout={workout}
                 navigation={navigation}
