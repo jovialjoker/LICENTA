@@ -14,6 +14,7 @@ import AddProgressScreen from "./src/screens/Workout/AddProgress/AddProgressScre
 import ChooseActionScreen from "./src/screens/Workout/ChooseAction/ChooseActionScreen";
 import env from "./src/utils/constants/env";
 import ChangeGoalsScreen from "./src/screens/Home/ChangeGoals/ChangeGoalsScreen";
+import MyProfile from "./src/screens/Menu/MyProfile";
 
 LogBox.ignoreAllLogs();
 const App = () => {
@@ -71,6 +72,11 @@ const App = () => {
               name="ChangeGoals"
               component={ChangeGoalsScreen}
               options={{ headerShown: true, title: "Change goals" }}
+            />
+            <Stack.Screen
+              name="MyProfile"
+              component={MyProfile}
+              options={{ headerShown: true, title: "My profile" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

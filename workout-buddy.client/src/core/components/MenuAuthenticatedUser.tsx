@@ -44,7 +44,7 @@ function MenuAuthenticatedUser({
               _hover={{
                 textDecoration: "none",
               }}
-              href={`https://localhost:3000/user-edit`}
+              href={`/user-edit`}
             >
               My profile
             </Link>

@@ -86,7 +86,7 @@ const AuthScreen = ({ navigation, route }) => {
           </Flex>
           <Flex>
             <Heading fontFamily={"mono"} size={"2xl"} textAlign={"center"}>
-              Workout Buddy
+              WorkoutBuddy
             </Heading>
           </Flex>
         </VStack>
@@ -107,7 +107,7 @@ const AuthScreen = ({ navigation, route }) => {
               onChangeText={(text: string) => changeHandler("password", text)}
             />
           </FormControl>
-          <Button mt="2" bgColor="#A4C2A5" onPress={submitHandler}>
+          <Button mt="2" bgColor="#4E81D9" onPress={submitHandler}>
             Sign in
           </Button>
         </VStack>

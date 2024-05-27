@@ -2,6 +2,7 @@ export const endpoints = {
   User: {
     Login: "UserAccount/login",
     GetCurrentWeight: "UserAccount/getCurrentWeight",
+    UserInfo: "UserAccount/profilePage",
   },
   UserSplit: {
     GetCurrentSplit: "UserSplit/GetCurrentSplit",

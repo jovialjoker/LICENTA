@@ -4,7 +4,7 @@ import Svg, { Circle, G, Path } from "react-native-svg";
 const DumbellSvg = () => {
   return (
     <Svg
-      fill="#F1F2EB"
+      fill="#DCA950"
       id="Capa_1"
       width="70px"
       height="70px"
