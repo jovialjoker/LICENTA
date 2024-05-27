@@ -1,6 +1,8 @@
 ﻿using Backend.BusinessLogic;
 using Backend.BusinessLogic.Account;
+using Backend.BusinessLogic.Implementation.Account;
 using Backend.Common.DTOs;
+using Backend.Entities.Enums;
 using Backend.WebApp.Code.Base;
 using Backend.WebApp.Code.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -173,6 +175,45 @@ namespace Backend.WebApp.Controllers
             model.UserId = CurrentUser.Id;
             _service.AddWeight(model, CurrentUser.Id);
             return Ok();
+        }
+
+        [HttpPost("DisableUser")]
+        [Authorize("admin")]
+        public IActionResult DisableUser([FromBody] string id)
+        {
+            var userId = Guid.Parse(id);
+            if (userId == Guid.Empty)
+            {
+                userId = CurrentUser.Id;
+            }
+            var isDisabled = _service.ChangeAvailability(userId, true);
+            return Ok(isDisabled);
+        }
+
+        [HttpPost("ActivateUser")]
+        [Authorize("admin")]
+        public IActionResult ActivateUser([FromBody] string id)
+        {
+            var userId = Guid.Parse(id);
+            if (userId == Guid.Empty)
+            {
+                userId = CurrentUser.Id;
+            }
+            var isActivated = _service.ChangeAvailability(userId, false);
+            return Ok(isActivated);
+        }
+
+        [HttpPost("MakeAdmin")]
+        [Authorize("admin")]
+        public IActionResult MakeAdmin([FromBody] MakeAdminModel user)
+        {
+            var userId = Guid.Parse(user.Id);
+            if (userId == Guid.Empty)
+            {
+                userId = CurrentUser.Id;
+            }
+            var isActivated = _service.MakeAdmin(userId, user.IsAdmin);
+            return Ok(isActivated);
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)

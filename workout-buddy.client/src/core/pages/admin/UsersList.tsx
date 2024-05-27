@@ -17,17 +17,22 @@ import {
   Tbody,
   Thead,
 } from "@chakra-ui/react";
-import { GrUserAdmin } from "react-icons/all";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { GrUserAdmin, GrUserNew } from "react-icons/all";
+import { DeleteIcon, UnlockIcon, LockIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import AuthHeader from "../../../utils/authorizationHeaders";
 
+interface IUser {
+  userId: string;
+  name: string;
+  email: string;
+  username: string;
+  isDeleted: boolean;
+  isAdmin: boolean;
+}
 const UsersPage = () => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const cancelRef = useRef(null);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -46,24 +51,43 @@ const UsersPage = () => {
     getUsers();
   }, []);
 
-  const handleMakeAdminClick = (userId: string) => {
+  const handleMakeAdminClick = async (userId: string) => {
     console.log(`Make admin clicked for user with ID ${userId}`);
+    let user = users.find((u) => u.userId == userId);
+    if (user) {
+      await axios.post(
+        `https://localhost:7132/UserAccount/MakeAdmin`,
+        JSON.stringify({ id: userId, isAdmin: !user.isAdmin }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: AuthHeader(),
+          },
+        }
+      );
+      let newUsers = users.filter((u) => u.userId != userId);
+      setUsers([...newUsers, { ...user, isAdmin: !user.isAdmin }]);
+    }
   };
 
-  const handleDeleteClick = (userId: string) => {
-    setSelectedUserId(userId);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteDialogClose = () => {
-    setDeleteDialogOpen(false);
-    setSelectedUserId(null);
-  };
-
-  const handleDeleteDialogConfirm = () => {
-    console.log(`Delete clicked for user with ID ${selectedUserId}`);
-    setDeleteDialogOpen(false);
-    setSelectedUserId(null);
+  const handleDeleteClick = async (userId: string) => {
+    let user = users.find((u) => u.userId == userId);
+    if (user) {
+      await axios.post(
+        `https://localhost:7132/UserAccount/${
+          user.isDeleted ? "ActivateUser" : "DisableUser"
+        }`,
+        userId,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: AuthHeader(),
+          },
+        }
+      );
+      let newUsers = users.filter((u) => u.userId != userId);
+      setUsers([...newUsers, { ...user, isDeleted: !user.isDeleted }]);
+    }
   };
 
   return (
@@ -104,52 +128,59 @@ const UsersPage = () => {
                 <Td>{user.email}</Td>
                 <Td>{user.name}</Td>
                 <Td>
-                  <Tooltip title="Make Admin">
-                    <IconButton
-                      aria-label="make admin"
-                      onClick={() =>
-                        handleMakeAdminClick(user.userId.toString(10))
-                      }
-                    >
-                      <GrUserAdmin />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Delete user">
-                    <IconButton
-                      aria-label="delete user"
-                      onClick={() =>
-                        handleDeleteClick(user.userId.toString(10))
-                      }
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
+                  {user.isAdmin ? (
+                    <Tooltip title="Remove admin">
+                      <IconButton
+                        aria-label="remove admin"
+                        onClick={() =>
+                          handleMakeAdminClick(user.userId.toString(10))
+                        }
+                      >
+                        <GrUserNew />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Make Admin">
+                      <IconButton
+                        aria-label="make admin"
+                        onClick={() =>
+                          handleMakeAdminClick(user.userId.toString(10))
+                        }
+                      >
+                        <GrUserAdmin />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+
+                  {user.isDeleted ? (
+                    <Tooltip title="Activate user">
+                      <IconButton
+                        aria-label="activate user"
+                        onClick={() =>
+                          handleDeleteClick(user.userId.toString(10))
+                        }
+                      >
+                        <UnlockIcon />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Disable user">
+                      <IconButton
+                        aria-label="delete user"
+                        onClick={() =>
+                          handleDeleteClick(user.userId.toString(10))
+                        }
+                      >
+                        <LockIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
-      <AlertDialog
-        isOpen={deleteDialogOpen}
-        onClose={handleDeleteDialogClose}
-        leastDestructiveRef={cancelRef}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader>Delete user</AlertDialogHeader>
-            <AlertDialogBody>
-              Are you sure you want to delete this user?
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button onClick={handleDeleteDialogClose}>Cancel</Button>
-              <Button onClick={handleDeleteDialogConfirm} color="red.600">
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
     </>
   );
 };
