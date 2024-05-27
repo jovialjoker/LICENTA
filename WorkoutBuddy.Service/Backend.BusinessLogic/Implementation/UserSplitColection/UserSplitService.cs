@@ -592,6 +592,39 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
         }
 
 
+        public int GetNoOfPrsInThisWeek(Guid userId)
+        {
+            var today = DateTime.Today;
+
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
+
+            var userWorkoutCount = UnitOfWork.UserExercises.Get()
+                                    .Where(ue => ue.Iduser == userId && ue.EffortCoefficient > 1 &&
+                                                 ue.Date >= startOfWeek &&
+                                                 ue.Date <= endOfWeek)
+                                    .Count();
+
+            return userWorkoutCount;
+        }
+
+        public int GetNoOfWorkoutsInThisWeek(Guid userId)
+        {
+            var today = DateTime.Today;
+
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
+
+            var userWorkoutCount = UnitOfWork.UserWorkouts.Get()
+                                    .Where(ue => ue.Iduser == userId &&
+                                                 ue.Date >= startOfWeek &&
+                                                 ue.Date <= endOfWeek)
+                                    .Count();
+
+            return userWorkoutCount;
+        }
+
+
         private decimal ExercisesCoefficientCalculator(List<UserExerciseSet> sets, User? user)
         {
             var exerciseCoefficient = decimal.One;

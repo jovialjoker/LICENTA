@@ -8,7 +8,6 @@ const useFetch = async (
   ) => {
       let token = await AsyncStorage.getItem("token");
     
-      console.log({ Authorization: "Bearer " + token.substring(0, token.length) })
       let res = await fetch(`${env.NGROK_URL}/${endpoint}`, {
         // ...opt,
         body: data,

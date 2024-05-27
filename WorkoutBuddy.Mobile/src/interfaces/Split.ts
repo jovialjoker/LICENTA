@@ -8,8 +8,8 @@ export interface ISplitListItem {
 
 export interface IGoal {
   name: string;
-  currentValue: number;
-  targetValue: number;
+  value: number;
+  target: number;
   percent: number;
 }
 

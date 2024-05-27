@@ -51,7 +51,7 @@ const AddProgressScreen = ({ navigation, route }) => {
     setWorkoutModel(newWorkout);
   };
 
-  const finishLaterHandler = async () => {
+  const formatWorkout = (workoutModel: IUserWorkoutModel) => {
     let formatedWorkout: IUserWorkoutModel = {
       ...workoutModel,
       exercises: [],
@@ -74,7 +74,43 @@ const AddProgressScreen = ({ navigation, route }) => {
       };
       formatedWorkout.exercises.push(formatedEx);
     }
+    return formatedWorkout;
+  };
 
+  const addProgressHandler = async () => {
+    let formatedWorkout = formatWorkout(workoutModel);
+    try {
+      await axios.post(
+        `${env.NGROK_URL}/${endpoints.UserSplit.AddProgress}`,
+        formatedWorkout,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: await AuthHeader(),
+          },
+        }
+      );
+
+      let unfinishedWorkouts =
+        (await AsyncStorage.getItem("unfinished")) ?? "[]";
+      let workouts = JSON.parse(unfinishedWorkouts);
+      workouts = workouts.filter(
+        (w: IUserWorkoutModel) =>
+          w.workoutId != formatedWorkout.workoutId &&
+          w.date != formatedWorkout.date
+      );
+      await AsyncStorage.setItem("unfinished", JSON.stringify([...workouts]));
+
+      navigation.navigate("Home", {
+        refreshFlag: formatedWorkout.date.toString(),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const finishLaterHandler = async () => {
+    let formatedWorkout = formatWorkout(workoutModel);
     try {
       let unfinishedWorkouts =
         (await AsyncStorage.getItem("unfinished")) ?? "[]";
@@ -121,7 +157,7 @@ const AddProgressScreen = ({ navigation, route }) => {
         >
           <Text>Finish later</Text>
         </Button>
-        <Button w="40%" bgColor={"#4E81D9"}>
+        <Button w="40%" bgColor={"#4E81D9"} onPress={addProgressHandler}>
           End workout
         </Button>
       </Flex>

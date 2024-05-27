@@ -3,16 +3,17 @@ import React from "react";
 import { Carousel } from "react-native-basic-carousel";
 import CircularProgress from "react-native-circular-progress-indicator";
 import { IGoal, ISplitListItem } from "../../../interfaces/Split";
+import GoalsCarousel from "./GoalsCarousel";
 
 interface IFeatureList {
   currentSplit: ISplitListItem;
-  goalsList: IGoal[];
   navigation: Function;
+  refresh: any;
 }
 
 export default function FeatureList({
   currentSplit,
-  goalsList,
+  refresh,
   navigation,
 }: IFeatureList) {
   return (
@@ -35,7 +36,9 @@ export default function FeatureList({
             borderRadius={"xl"}
             _pressed={{ bgColor: "#e0c598" }}
           >
-            <Text>{currentSplit ? "Change the current split" : "Select split"}</Text>
+            <Text>
+              {currentSplit ? "Change the current split" : "Select split"}
+            </Text>
           </Button>
         </Flex>
         {currentSplit ? (
@@ -86,7 +89,7 @@ export default function FeatureList({
             w="50%"
             variant={"outline"}
             onPress={() => {
-              console.log("pressed");
+              navigation.navigate("ChangeGoals");
             }}
             borderColor={"#DCA950"}
             borderRadius={"xl"}
@@ -97,28 +100,7 @@ export default function FeatureList({
         </Flex>
 
         <Flex alignItems="center" mt="3">
-          <Carousel
-            data={goalsList}
-            renderItem={({ item, index }: { item: IGoal; index: number }) => (
-              <Flex alignItems={"center"} px="3">
-                <CircularProgress
-                  value={item.percent}
-                  radius={70}
-                  activeStrokeColor={"#DCA950"}
-                  title={"%"}
-                />
-                <Heading size="md" mt="3">
-                  {item.name}
-                </Heading>
-                <Text bold>
-                  {item.currentValue}/{item.targetValue}
-                </Text>
-              </Flex>
-            )}
-            itemWidth={300}
-            pagination
-            autoplay
-          />
+          <GoalsCarousel refresh={refresh} />
         </Flex>
       </Flex>
     </Box>

@@ -129,7 +129,7 @@ export default function Header() {
                       textDecoration: "none",
                       bg: colors.bgHover,
                     }}
-                    href={`https://localhost:3000/pending-exercises`}
+                    href={`/pending-exercises`}
                   >
                     Pending Exercises
                   </Link>
@@ -143,7 +143,7 @@ export default function Header() {
                       textDecoration: "none",
                       bg: colors.bgHover,
                     }}
-                    href={`https://localhost:3000/users-list`}
+                    href={`/users-list`}
                   >
                     Users
                   </Link>

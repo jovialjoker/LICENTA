@@ -37,7 +37,6 @@ const ExerciseCard = ({ exercise, changeHandler }: IExerciseCard) => {
   useEffect(() => {
     if (exercise.sets && exercise.sets.length > 0) {
       setSets(exercise.sets);
-      console.log("here");
     }
   }, [exercise.sets]);
 
@@ -55,7 +54,6 @@ const ExerciseCard = ({ exercise, changeHandler }: IExerciseCard) => {
 
   const removeSetHandler = (index: number) => {
     const newSets = sets.filter((s, i) => i !== index);
-    console.log(newSets);
     setSets([...newSets]);
 
     changeHandler({ ...exercise, sets: newSets });

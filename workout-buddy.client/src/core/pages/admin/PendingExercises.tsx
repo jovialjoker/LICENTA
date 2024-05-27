@@ -34,7 +34,7 @@ function PendingExercises() {
     };
     getExercises();
   }, []);
-
+  console.log("here");
   return (
     <>
       <ListWrapper>

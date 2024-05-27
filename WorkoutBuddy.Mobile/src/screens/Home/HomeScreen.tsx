@@ -70,24 +70,11 @@ export default function HomeScreen({ navigation, route }) {
         pt="5"
         px="5"
       >
-          <FeatureList
-            navigation={navigation}
-            currentSplit={currentSplit}
-            goalsList={[
-              {
-                name: "Workouts done this week",
-                currentValue: 3,
-                targetValue: 7,
-                percent: 55,
-              },
-              {
-                name: "Pr's beaten this week",
-                currentValue: 1,
-                targetValue: 7,
-                percent: 8,
-              },
-            ]}
-          />
+        <FeatureList
+          navigation={navigation}
+          currentSplit={currentSplit}
+          refresh={route.params?.refreshFlag}
+        />
       </ScrollView>
     </Flex>
   );

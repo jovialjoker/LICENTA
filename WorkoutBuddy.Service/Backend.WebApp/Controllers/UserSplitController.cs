@@ -124,5 +124,20 @@ namespace Backend.WebApp.Controllers
             var model = service.GetUnfinishedProgressForWorkout(workoutId, date, CurrentUser.Id);
             return Ok(model);
         }
+
+        [HttpGet("GetNoOfPrsInThisWeek")]
+        public IActionResult GetNoOfPrsInThisWeek()
+        {
+            var model = service.GetNoOfPrsInThisWeek(CurrentUser.Id);
+            return Ok(model);
+        }
+
+        [HttpGet("GetNoOfWorkoutsInThisWeek")]
+        public IActionResult GetNoOfWorkoutsInThisWeek()
+        {
+            var model = service.GetNoOfWorkoutsInThisWeek(CurrentUser.Id);
+            return Ok(model);
+        }
+        
     }
 }

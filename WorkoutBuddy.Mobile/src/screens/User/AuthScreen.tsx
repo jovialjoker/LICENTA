@@ -37,7 +37,6 @@ const AuthScreen = ({ navigation, route }) => {
     });
 
     const data = await res.json();
-
     if (data.status != 401 && data.status != 400) {
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem(
