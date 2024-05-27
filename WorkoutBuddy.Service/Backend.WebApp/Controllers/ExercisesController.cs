@@ -66,9 +66,9 @@ namespace Backend.WebApp.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult DeleteExercise([FromBody] Guid exerciseId)
+        public IActionResult DeleteExercise([FromBody] string exerciseId)
         {
-            exerciseService.DeleteExercise(exerciseId);
+            exerciseService.DeleteExercise(Guid.Parse(exerciseId));
             return Ok();
         }
 

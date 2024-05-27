@@ -17,7 +17,7 @@ namespace WorkoutBuddy.BusinessLogic.AdminDashboard
                 .ForMember(s => s.Email, s => s.MapFrom(s => s.Email))
                 .ForMember(s => s.Username, s => s.MapFrom(s => s.Username))
                 .ForMember(s => s.Name, s => s.MapFrom(s => s.Name))
-                ;
+                .ForMember(s => s.IsAdmin, s => s.Ignore());
         }
 
         

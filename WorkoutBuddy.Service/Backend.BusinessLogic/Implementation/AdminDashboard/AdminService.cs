@@ -1,5 +1,6 @@
 ﻿using Backend.BusinessLogic.Base;
 using Backend.Entities;
+using Backend.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace WorkoutBuddy.BusinessLogic.AdminDashboard
             foreach (var user in userList)
             {
                 var userModel = Mapper.Map<User, UserModel>(user);
+                userModel.IsAdmin = user.Idroles.Select(r => r.Idrole).Contains((int)RoleTypes.Admin);
                 list.Add(userModel);
             }
             return list;

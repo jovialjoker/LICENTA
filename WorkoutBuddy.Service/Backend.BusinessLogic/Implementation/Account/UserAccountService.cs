@@ -10,6 +10,7 @@ using Backend.Entities;
 using Backend.Common.Exceptions;
 using System.Text.RegularExpressions;
 using Backend.Entities.Enums;
+using System.Data;
 
 namespace Backend.BusinessLogic.Account
 {
@@ -284,6 +285,75 @@ namespace Backend.BusinessLogic.Account
 
             });
             return errorMessage;
+        }
+
+        public bool ChangeAvailability(Guid id, bool isDeleted)
+        {
+            var isAvailable = true;
+            ExecuteInTransaction(uow =>
+            {
+                var user = uow.Users.Get()
+                            .FirstOrDefault(u => u.Iduser == id);
+
+                if (user == null)
+                {
+                    throw new NotFoundErrorException("this user does not exist!");
+                }
+
+                user.IsDeleted = isDeleted;
+                user.LastModifiedOn = DateTime.Now;
+                try
+                {
+                    uow.Users.Update(user);
+
+                    uow.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    isAvailable = false;
+                }
+            });
+            return isAvailable;
+        }
+
+        public bool MakeAdmin(Guid id, bool isAdmin)
+        {
+            var isAvailable = true;
+            ExecuteInTransaction(uow =>
+            {
+                var user = uow.Users.Get()
+                            .Include(u => u.Idroles)
+                            .FirstOrDefault(u => u.Iduser == id);
+
+                if (user == null)
+                {
+                    throw new NotFoundErrorException("this user does not exist!");
+                }
+
+                if (isAdmin)
+                {
+                    var newRole = uow.Roles.Get().FirstOrDefault(r => r.Idrole == (int)RoleTypes.Admin);
+                    user.Idroles.Add(newRole);
+                }
+                else
+                {
+                    var newRole = uow.Roles.Get().FirstOrDefault(r => r.Idrole == (int)RoleTypes.Admin);
+                    user.Idroles.Remove(newRole);
+                }
+
+                user.LastModifiedOn = DateTime.Now;
+                try
+                {
+                    uow.Users.Update(user);
+
+                    uow.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    isAvailable = false;
+                }
+            });
+            return isAvailable;
         }
 
         private bool PasswordRegexTest(string password)
