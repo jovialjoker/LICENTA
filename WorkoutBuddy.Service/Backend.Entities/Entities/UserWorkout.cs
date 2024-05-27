@@ -15,6 +15,7 @@ namespace Backend.Entities
         public Guid Idworkout { get; set; }
         public DateTime Date { get; set; }
         public decimal? WorkoutEffortCoefficient { get; set; }
+        public Boolean? IsFinished{ get; set; }
 
         public virtual UserSplit Id { get; set; } = null!;
         public virtual Workout IdNavigation { get; set; } = null!;

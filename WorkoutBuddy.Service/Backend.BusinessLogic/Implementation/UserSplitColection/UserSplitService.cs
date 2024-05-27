@@ -1,5 +1,7 @@
 ﻿using Backend.BusinessLogic.Base;
+using Backend.BusinessLogic.Implementation.UserSplitColection.MobileModels;
 using Backend.BusinessLogic.Implementation.UserSplitColection.Models;
+using Backend.BusinessLogic.Splits;
 using Backend.Common.Exceptions;
 using Backend.Common.Extensions;
 using Backend.Entities;
@@ -44,6 +46,95 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             return userSplitsList;
         }
 
+        public UserSplitListItem GetCurrentSplit(Guid idUser)
+        {
+            var user = UnitOfWork.Users.Get()
+                .Include(u => u.UserSplits)
+                    .ThenInclude(us => us.UserWorkouts)
+                .Include(u => u.UserSplits)
+                    .ThenInclude(us => us.IdsplitNavigation)
+                        .ThenInclude(s => s.Workouts)
+                .SingleOrDefault(u => u.Iduser == idUser);
+
+            var currentSplit = user.UserSplits.FirstOrDefault(us => us.isCurrentSplit == true);
+            return Mapper.Map<UserSplit, UserSplitListItem>(currentSplit);
+        }
+
+        public List<UnfinishedWorkoutListItem> GetUnfinishedWorkouts(Guid userId)
+        {
+            var split = UnitOfWork.UserSplits.Get()
+                        .Include(us => us.UserWorkouts)
+                            .ThenInclude(uw => uw.UserExercises)
+                                .ThenInclude(ue => ue.UserExerciseSets)
+                        .Include(us => us.UserWorkouts)
+                            .ThenInclude(uw => uw.IdNavigation)
+                                .ThenInclude(w => w.WorkoutExercises)
+                                    .ThenInclude(we => we.IdexerciseNavigation)
+                        .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+            
+            if(split == null)
+            {
+                throw new NotFoundErrorException();
+            }
+
+            var unfinishedWorkouts = new List<UnfinishedWorkoutListItem>();
+
+            var workouts = split.UserWorkouts
+                        .Where(us => us.IsFinished != true)
+                        .ToList();
+
+            if(workouts.Count == 0)
+            {
+                return unfinishedWorkouts;
+            }
+
+            foreach(var userWorkout in workouts)
+            {
+                var workoutModel = Mapper.Map<UserWorkout, UnfinishedWorkoutListItem>(userWorkout);
+
+                var workoutExercisesId = userWorkout.UserExercises
+                                            .Select(ue => ue.Idexercise)
+                                            .ToList();
+
+                var exercisesContained = UnitOfWork.Exercises.Get()
+                                        .Where(e => workoutExercisesId.Contains(e.Idexercise))
+                                        .ToList();
+
+                var exercises = userWorkout.UserExercises
+                                .Select(ue => new UnfinishedExerciseListItem
+                                {
+                                    ExerciseId = ue.Idexercise,
+                                    SetsRecorded = ue.UserExerciseSets.Count,
+                                    Name = exercisesContained.FirstOrDefault(e => e.Idexercise == ue.Idexercise).Name
+                                })
+                                .ToList();
+
+                workoutModel.Exercises = exercises;
+                unfinishedWorkouts.Add(workoutModel);
+            }
+
+            return unfinishedWorkouts;
+        }
+
+        public async Task ChangeCurrentSplit(Guid splitId, Guid userId)
+        {
+            var prevCurrentSplit = UnitOfWork.UserSplits.Get()
+                                    .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+            if (prevCurrentSplit != null) 
+            { 
+                prevCurrentSplit.isCurrentSplit = false;
+                UnitOfWork.UserSplits.Update(prevCurrentSplit);
+            }
+
+            var userSplit = await UnitOfWork.UserSplits.Get()
+                            .FirstAsync(u => u.Iduser == userId && u.Idsplit == splitId);
+
+            userSplit.isCurrentSplit = true;
+            UnitOfWork.UserSplits.Update(userSplit);
+
+            UnitOfWork.SaveChanges();
+        }
+
         public UserSplitModel GetUserSplit(Guid splitId, Guid userId)
         {
             var split = UnitOfWork.UserSplits.Get()
@@ -65,6 +156,43 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
             }
 
             return userSplit;
+        }
+
+        public List<MobileWorkoutListItem> GetWorkoutsForProgress(Guid userId) 
+        {
+            var split = UnitOfWork.UserSplits.Get()
+                        .Include(us => us.IdsplitNavigation)
+                            .ThenInclude(s => s.Workouts)
+                                .ThenInclude(s => s.WorkoutExercises)
+                                    .ThenInclude(s => s.IdexerciseNavigation)
+                        .FirstOrDefault(us => us.Iduser == userId && us.isCurrentSplit == true);
+
+            if (split == null)
+            {
+                throw new NotFoundErrorException();
+            }
+
+            var workoutsList = new List<MobileWorkoutListItem>();
+
+
+            foreach (var workout in split.IdsplitNavigation.Workouts)
+            {
+                var formatedWorkout = Mapper.Map<Workout, MobileWorkoutListItem>(workout);
+
+                var exercises = workout.WorkoutExercises
+                                        .Select(we => we.IdexerciseNavigation)
+                                        .Select(e => new MobileExerciseListItem()
+                                        {
+                                            ExerciseId = e.Idexercise,
+                                            Name = e.Name
+                                        })
+                                        .ToList();
+
+                formatedWorkout.Exercises = exercises;
+                workoutsList.Add(formatedWorkout);
+            }
+
+            return workoutsList;
         }
 
         public UserWorkoutModel PopulateUserWorkoutModel(Guid id)
@@ -429,6 +557,73 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
                 uow.SaveChanges();
             });
         }
+
+        public UserWorkoutModel GetUnfinishedProgressForWorkout(Guid workoutId, DateTime? date, Guid userId)
+        {
+            var workoutModel = PopulateUserWorkoutModel(workoutId);
+            if(date != null)
+            {
+                var userWorkout = UnitOfWork.UserWorkouts.Get()
+                                    .Include(uw => uw.UserExercises)
+                                        .ThenInclude(ue => ue.UserExerciseSets)
+                                    .FirstOrDefault(uw => uw.Idworkout == workoutId 
+                                                        && uw.Idsplit == workoutModel.SplitId 
+                                                        && uw.Date == date
+                                                        && uw.Iduser == userId);
+                
+                foreach(var userExercise in userWorkout.UserExercises)
+                {
+                    var sets = userExercise.UserExerciseSets.Select(ues => new SetModel
+                    {
+                        Reps = ues.RepsNo,
+                        Weight = ues.Weight,
+                        Duration = ues.Duration,
+                        Distance = ues.Distance
+                    }).ToList();
+
+                    var exercises = workoutModel.Exercises.Find(e => e.ExerciseId == userExercise.Idexercise);
+
+                    exercises.Sets = new List<SetModel>();
+                    exercises.Sets.AddRange(sets);
+                    exercises.SetsNo = sets.Count();
+                }
+            }
+            return workoutModel;
+        }
+
+
+        public int GetNoOfPrsInThisWeek(Guid userId)
+        {
+            var today = DateTime.Today;
+
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
+
+            var userWorkoutCount = UnitOfWork.UserExercises.Get()
+                                    .Where(ue => ue.Iduser == userId && ue.EffortCoefficient > 1 &&
+                                                 ue.Date >= startOfWeek &&
+                                                 ue.Date <= endOfWeek)
+                                    .Count();
+
+            return userWorkoutCount;
+        }
+
+        public int GetNoOfWorkoutsInThisWeek(Guid userId)
+        {
+            var today = DateTime.Today;
+
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
+
+            var userWorkoutCount = UnitOfWork.UserWorkouts.Get()
+                                    .Where(ue => ue.Iduser == userId &&
+                                                 ue.Date >= startOfWeek &&
+                                                 ue.Date <= endOfWeek)
+                                    .Count();
+
+            return userWorkoutCount;
+        }
+
 
         private decimal ExercisesCoefficientCalculator(List<UserExerciseSet> sets, User? user)
         {

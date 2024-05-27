@@ -28,7 +28,7 @@ export default function ViewExercise() {
     const getExercise = async (id: string) => {
       const { data } = await axios({
         method: "get",
-        url: `http://localhost:8082/Exercises/view?id=${id}`,
+        url: `https://localhost:7132/Exercises/view?id=${id}`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -52,7 +52,7 @@ export default function ViewExercise() {
           <Image
             rounded={"md"}
             alt={"product image"}
-            src={`http://localhost:8082/Image/getImageById?id=${exercise.idImage}`}
+            src={`https://localhost:7132/Image/getImageById?id=${exercise.idImage}`}
             fit={"cover"}
             align={"center"}
             w={"100%"}

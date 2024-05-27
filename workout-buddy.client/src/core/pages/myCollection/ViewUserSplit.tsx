@@ -29,7 +29,7 @@ const ViewUserSplit = () => {
       const id = getURLID(window.location.href);
       const { data } = await axios({
         method: "get",
-        url: "http://localhost:8082/UserSplit/GetSplit?id=" + id,
+        url: "https://localhost:7132/UserSplit/GetSplit?id=" + id,
         headers: {
           Authorization: AuthHeader(),
         },

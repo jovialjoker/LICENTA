@@ -34,7 +34,7 @@ const UsersPage = () => {
       setLoading(true);
       const { data } = await axios({
         method: "get",
-        url: "http://localhost:8082/Admin/getAllUsers",
+        url: "https://localhost:7132/Admin/getAllUsers",
         headers: {
           Authorization: AuthHeader(),
         },

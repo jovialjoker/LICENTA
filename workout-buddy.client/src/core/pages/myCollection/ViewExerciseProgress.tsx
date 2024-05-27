@@ -42,7 +42,7 @@ const ViewExerciseProgress = () => {
       const id = getURLID(window.location.href);
       debugger;
       const { data } = await axios.get(
-        "http://localhost:8082/UserSplit/GetExercisesProgress?id=" + id,
+        "https://localhost:7132/UserSplit/GetExercisesProgress?id=" + id,
         {
           headers: {
             Authorization: AuthHeader(),
@@ -63,7 +63,9 @@ const ViewExerciseProgress = () => {
             display: "flex",
           }}
         >
-          <Heading textAlign={"center"}>Your exercises progress in this workout</Heading>
+          <Heading textAlign={"center"}>
+            Your exercises progress in this workout
+          </Heading>
         </Box>
         <Flex flexDir={"column"}>
           {exercises.length > 0 && exercises[0].exerciseName != null ? (
@@ -74,8 +76,15 @@ const ViewExerciseProgress = () => {
               ></ExerciseProgress>
             ))
           ) : (
-            <Flex height={"30vh"} width={"80vw"} alignItems={"center"} justifyContent={"center"}>
-              <Heading size="md">Unfortunatly there is no recorded progress for this workout</Heading>
+            <Flex
+              height={"30vh"}
+              width={"80vw"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Heading size="md">
+                Unfortunatly there is no recorded progress for this workout
+              </Heading>
             </Flex>
           )}
         </Flex>

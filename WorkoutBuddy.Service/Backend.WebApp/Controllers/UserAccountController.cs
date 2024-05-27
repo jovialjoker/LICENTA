@@ -152,6 +152,7 @@ namespace Backend.WebApp.Controllers
         }
 
         [HttpGet("getCurrentWeight")]
+        [Authorize]
         public async Task<IActionResult> GetCurrentWeight()
         {
             return Ok(await _service.GetCurrentWeight(CurrentUser.Id));

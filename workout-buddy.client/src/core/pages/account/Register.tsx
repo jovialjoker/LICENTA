@@ -45,7 +45,7 @@ export default function Register() {
     try {
       const res = await axios({
         method: "post",
-        url: "http://localhost:8082/UserAccount/register",
+        url: "https://localhost:7132/UserAccount/register",
         data: registerModel,
       });
 

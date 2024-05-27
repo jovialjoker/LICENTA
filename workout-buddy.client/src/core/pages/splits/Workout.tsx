@@ -35,7 +35,7 @@ const Workout = (props: IWorkoutProps) => {
       }
       const { data } = await axios({
         method: "get",
-        url: `http://localhost:8082/Exercises/getExercisesByMuscleGroups${queryString}`,
+        url: `https://localhost:7132/Exercises/getExercisesByMuscleGroups${queryString}`,
         headers: {
           Authorization: AuthHeader(),
         },

@@ -21,7 +21,7 @@ function PendingExercises() {
     const getExercises = async () => {
       try {
         const result = await axios.get(
-          "http://localhost:8082/Admin/getPendingExercises",
+          "https://localhost:7132/Admin/getPendingExercises",
           {
             headers: {
               Authorization: AuthHeader(),
@@ -34,7 +34,7 @@ function PendingExercises() {
     };
     getExercises();
   }, []);
-
+  console.log("here");
   return (
     <>
       <ListWrapper>
@@ -66,11 +66,14 @@ function PendingExercises() {
               })}
             </Grid>
           ) : (
-            (
-                <Flex height={"30vh"} width={"80vw"} alignItems={"center"} justifyContent={"center"}>
-                  <Heading size="md">There is no pending exercise</Heading>
-                </Flex>
-              )
+            <Flex
+              height={"30vh"}
+              width={"80vw"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Heading size="md">There is no pending exercise</Heading>
+            </Flex>
           )}
         </GridItem>
       </ListWrapper>

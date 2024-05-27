@@ -12,5 +12,6 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int WorkoutsNo { get; set; }
+        public Boolean isCurrentSplit { get; set; }
     }
 }

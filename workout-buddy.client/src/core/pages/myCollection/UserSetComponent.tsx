@@ -16,7 +16,6 @@ const UserSetComponent = ({
   changeHandler,
   set,
 }: IUserExerciseComponent) => {
-
   const setChangeHandler = (value: number, property: string) => {
     let newSet = { ...set, [property]: value };
     changeHandler(newSet, index);
