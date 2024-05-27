@@ -56,9 +56,10 @@ namespace Backend.WebApp.Controllers
         }
 
         [HttpPost("editSplit")]
-        public IActionResult EditSplit(SplitModel model)
+        public IActionResult EditSplit([FromQuery] List<WorkoutModel> workouts, [FromForm] SplitModel model)
         {
             model.CreatorId = CurrentUser.Id;
+            model.Workouts = workouts;
             service.EditSplit(model);
 
             return Ok();

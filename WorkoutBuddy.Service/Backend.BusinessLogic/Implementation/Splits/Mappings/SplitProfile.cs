@@ -13,7 +13,7 @@ namespace Backend.BusinessLogic.Splits
                 .ForMember(a => a.Name, a => a.MapFrom(s => s.Name))
                 .ForMember(a => a.Idcreator, a => a.MapFrom(s => s.CreatorId))
                 .ForMember(a => a.Description, a => a.MapFrom(s => s.Description))
-                .ForMember(a => a.IsPrivate, a => a.MapFrom(s => !(s.IsPrivate.HasValue && s.IsPrivate == false)))
+                .ForMember(a => a.IsPrivate, a => a.MapFrom(s => s.IsPrivate == true))
                 .ForMember(s => s.Workouts, s => s.Ignore());
 
 

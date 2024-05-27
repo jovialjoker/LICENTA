@@ -6,21 +6,35 @@ import {
   Flex,
   Heading,
   HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useColors from "./colors";
+import AuthHeader from "../../../utils/authorizationHeaders";
+import axios from "axios";
 
 interface ISplitCardProps {
   split: any;
 }
 
 export default function SplitCard({ split }: ISplitCardProps) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const colors = useColors();
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedSplitId, setSelectedSplitId] = useState("");
+
   useEffect(() => {
     const roles = sessionStorage.getItem("roles");
     if (roles) {
@@ -34,6 +48,26 @@ export default function SplitCard({ split }: ISplitCardProps) {
 
   const editHandler = (id: string) => {
     navigate(`/splits/insert-split?id=${id}`);
+  };
+
+  const deleteHandler = (id: string) => {
+    setSelectedSplitId(id);
+    onOpen();
+  };
+
+  const onDelete = async () => {
+    await axios.post(
+      `https://localhost:7132/Split/deleteSplit`,
+      selectedSplitId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: AuthHeader(),
+        },
+      }
+    );
+    onClose();
+    window.location.reload();
   };
 
   return (
@@ -149,6 +183,7 @@ export default function SplitCard({ split }: ISplitCardProps) {
                   rounded={"full"}
                   bg={"red.400"}
                   color={"white"}
+                  onClick={() => deleteHandler(split.splitId)}
                   boxShadow={
                     "0px 1px 25px -5px rgb(220 20 60 / 48%), 0 10px 10px -5px rgb(220 20 60 / 43%)"
                   }
@@ -166,6 +201,28 @@ export default function SplitCard({ split }: ISplitCardProps) {
           </Stack>
         </Stack>
       </Stack>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Text>Delete split</Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalFooter>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button
+              ml={2}
+              colorScheme={useColorModeValue(
+                "lightPallette.primary",
+                "darkPallette.primary"
+              )}
+              onClick={onDelete}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
 }

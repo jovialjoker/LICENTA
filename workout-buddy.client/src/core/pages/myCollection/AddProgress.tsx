@@ -89,7 +89,7 @@ const AddProgress = () => {
       },
     });
 
-    navigate("/exercises");
+    navigate("/my-collection");
   };
 
   return (

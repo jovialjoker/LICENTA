@@ -102,6 +102,8 @@ export default function InsertSplit() {
   const submitHandler = async (e: any) => {
     e.preventDefault();
     console.log(split);
+    const params = new URLSearchParams(window.location.search);
+    const id = params?.get("id");
 
     let formData = new FormData();
 
@@ -110,28 +112,32 @@ export default function InsertSplit() {
     formData.append("splitId", split.splitId);
     formData.append("name", split.name);
     formData.append("description", split.description);
-    formData.append("isPrivate", new Blob([JSON.stringify(split.isPrivate)]));
+    formData.append("isPrivate", JSON.stringify(split.isPrivate));
     let index = 0;
     for (let w of split.workouts) {
-      querryString += `&[${index}].id=${
-        w.id || "00000000-0000-0000-0000-000000000000"
-      }`;
-      querryString += `&[${index}].workoutName=${w.workoutName}`;
-      querryString += `&[${index}].isDeleted=${w.isDeleted}`;
-      let i = 0;
-      for (let ex of w.exercises) {
-        querryString += `&[${index}].exercises[${i}].value=${ex.value}`;
-        querryString += `&[${index}].exercises[${i}].label=${ex.label}`;
-        i++;
-      }
+      if (!w.isDeleted) {
+        querryString += `&[${index}].id=${
+          w.id || "00000000-0000-0000-0000-000000000000"
+        }`;
+        querryString += `&[${index}].workoutName=${w.workoutName}`;
+        querryString += `&[${index}].isDeleted=${w.isDeleted}`;
+        let i = 0;
+        for (let ex of w.exercises) {
+          querryString += `&[${index}].exercises[${i}].value=${ex.value}`;
+          querryString += `&[${index}].exercises[${i}].label=${ex.label}`;
+          i++;
+        }
 
-      index++;
+        index++;
+      }
     }
 
     try {
       await axios({
         method: "post",
-        url: `https://localhost:7132/Split/insertSplit${querryString}`,
+        url: `https://localhost:7132/Split/${
+          id ? "editSplit" : "insertSplit"
+        }${querryString}`,
         data: formData,
         headers: {
           Authorization: AuthHeader(),
