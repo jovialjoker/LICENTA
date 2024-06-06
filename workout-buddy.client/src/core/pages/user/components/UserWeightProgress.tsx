@@ -33,6 +33,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { themeColors } from "../../../../theme/colors";
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import { formatDate } from "../../../../utils/formatDate";
 
 ChartJS.register(
   CategoryScale,
@@ -60,7 +61,7 @@ const labels = [
 ];
 
 function UserWeightProgress(props: any) {
-  const [weightHistory, setWeightHistory] = useState<any>();
+  const [weightHistory, setWeightHistory] = useState<any>({});
   const token = AuthHeader();
 
   console.log(weightHistory);
@@ -88,34 +89,24 @@ function UserWeightProgress(props: any) {
 
   const data = {
     type: "line",
-    labels,
+    labels:
+      weightHistory && weightHistory.history?.length > 0
+        ? [...weightHistory?.history?.map((w: any) => formatDate(w.date))]
+        : [],
     options,
     datasets: [
       {
-        label: "Progress in " + new Date().getFullYear(),
-        data: labels.map((label, index) => {
-          const filteredWeightsByMonth = weightHistory?.history?.filter(
-            (w: any) => {
-              return (
-                w.date.getMonth() === index &&
-                w.date.getDate() === new Date().getDate()
-              );
-            }
-          );
-          return filteredWeightsByMonth?.length === 0
-            ? "0"
-            : (
-                filteredWeightsByMonth?.reduce(
-                  (acc: number, el: any) => acc + el.weight,
-                  0
-                ) / filteredWeightsByMonth?.length
-              ).toFixed(2);
-        }),
+        label: "Weight progress",
+        data:
+          weightHistory && weightHistory.history?.length > 0
+            ? [...weightHistory?.history.map((w: any) => w.weight)]
+            : [],
         borderColor: themeColors.lightPallette.primary[700],
         backgroundColor: themeColors.lightPallette.primary[300],
       },
     ],
   };
+  console.log(data);
 
   useEffect(() => {
     const getWeightHistory = async () => {

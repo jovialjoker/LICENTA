@@ -103,9 +103,7 @@ const ExerciseProgress = ({ exercise }: IExerciseProgress) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {Array.from(
-                    Array(exercise.days[index].sets.length).keys()
-                  ).map((i) => {
+                  {Array.from(Array(exercise.maxSets).keys()).map((i) => {
                     const setElements = [<td>{i + 1}</td>];
 
                     for (let index = 0; index < exercise.days.length; index++) {

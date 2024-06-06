@@ -20,17 +20,24 @@ import { endpoints } from "../../../utils/constants/endpoints";
 import axios from "axios";
 import AuthHeader from "../../../utils/SetAuthHeader";
 
+const defaultState = {
+  0: { isSelected: false, target: null, value: 0 },
+  1: { isSelected: false, target: null, value: 0 },
+  2: { isSelected: false, target: null, value: 0 },
+};
+
 const ChangeGoalsScreen = ({ navigation }) => {
   const toast = useToast();
-  const [selectedGoals, setSelectedGoals] = useState({
-    0: { isSelected: false, target: null, value: 0 },
-    1: { isSelected: false, target: null, value: 0 },
-    2: { isSelected: false, target: null, value: 0 },
-  });
+  const [selectedGoals, setSelectedGoals] = useState(defaultState);
   useEffect(() => {
     const getGoals = async () => {
       let goals = JSON.parse(await AsyncStorage.getItem("goals"));
-      setSelectedGoals(goals);
+      console.log(goals);
+      if (goals) {
+        setSelectedGoals(goals);
+      } else {
+        setSelectedGoals(defaultState);
+      }
     };
     getGoals();
   }, []);

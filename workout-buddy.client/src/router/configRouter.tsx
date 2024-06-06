@@ -36,7 +36,10 @@ export default function configRouter(opts?: string) {
           path: "login",
           element: <Login />,
         },
-
+        {
+          path: "register",
+          element: <Register />,
+        },
         {
           path: "exercises",
           element: (
@@ -176,10 +179,6 @@ export default function configRouter(opts?: string) {
           ),
         },
       ],
-    },
-    {
-      path: "register",
-      element: <Register />,
     },
   ]);
 }
