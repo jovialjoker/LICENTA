@@ -18,7 +18,7 @@ export default function FeatureList({
 }: IFeatureList) {
   return (
     <Box>
-      <Flex width={"100%"} mb="5">
+      <Flex width={"100%"} mb="2">
         <Flex
           mt="2"
           alignItems={"center"}
@@ -37,12 +37,12 @@ export default function FeatureList({
             _pressed={{ bgColor: "#e0c598" }}
           >
             <Text>
-              {currentSplit ? "Change the current split" : "Select split"}
+              {currentSplit ? "Change current split" : "Select split"}
             </Text>
           </Button>
         </Flex>
         {currentSplit ? (
-          <Flex marginX={"auto"} width={"70%"} mt="5">
+          <Flex marginX={"auto"} width={"70%"} mt="2">
             <Flex alignItems={"center"}>
               <Flex
                 alignItems={"center"}
@@ -77,7 +77,7 @@ export default function FeatureList({
         )}
       </Flex>
       <Divider></Divider>
-      <Flex mt="5">
+      <Flex mt="2">
         <Flex
           flexDir={"row"}
           alignItems={"center"}
@@ -86,7 +86,6 @@ export default function FeatureList({
         >
           <Heading>Goals progress</Heading>
           <Button
-            w="50%"
             variant={"outline"}
             onPress={() => {
               navigation.navigate("ChangeGoals");
@@ -99,7 +98,7 @@ export default function FeatureList({
           </Button>
         </Flex>
 
-        <Flex alignItems="center" mt="3">
+        <Flex alignItems="center">
           <GoalsCarousel refresh={refresh} />
         </Flex>
       </Flex>

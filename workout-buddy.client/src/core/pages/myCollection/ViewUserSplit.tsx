@@ -6,6 +6,7 @@ import axios from "axios";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import { getURLID } from "../../../utils/URLUtils";
 import UserWorkoutCard from "./UserWorkoutCard";
+import { url } from "../../../env";
 
 interface IUserSplitViewModel {
   description: string;
@@ -22,6 +23,8 @@ export interface IUserWorkout {
 }
 
 const ViewUserSplit = () => {
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState<number | null>(null);
   const [split, setSplits] = useState({} as IUserSplitViewModel);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ const ViewUserSplit = () => {
       const id = getURLID(window.location.href);
       const { data } = await axios({
         method: "get",
-        url: "https://localhost:7132/UserSplit/GetSplit?id=" + id,
+        url: `${url}UserSplit/GetSplit?id=` + id,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -57,10 +60,15 @@ const ViewUserSplit = () => {
             {[1, 2, 3, 4, 5].map((i) => (
               <StarIcon
                 key={i}
+                as={StarIcon}
                 id={`${i}`}
                 ml={1}
-                color="black"
+                color={i <= (hover || rating) ? "gold" : "black"}
                 fontSize={"4xl"}
+                onClick={() => setRating(i)}
+                onMouseEnter={() => setHover(() => i)}
+                onMouseLeave={() => setHover(null)}
+                cursor="pointer"
               />
             ))}
           </Flex>

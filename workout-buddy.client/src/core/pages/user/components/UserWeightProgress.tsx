@@ -34,6 +34,7 @@ import { Line } from "react-chartjs-2";
 import { themeColors } from "../../../../theme/colors";
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { formatDate } from "../../../../utils/formatDate";
+import { url } from "../../../../env";
 
 ChartJS.register(
   CategoryScale,
@@ -110,15 +111,12 @@ function UserWeightProgress(props: any) {
 
   useEffect(() => {
     const getWeightHistory = async () => {
-      let { data } = await axios.get(
-        "https://localhost:7132/UserAccount/GetWeightHistory",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
+      let { data } = await axios.get(`${url}UserAccount/GetWeightHistory`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
       setWeightHistory({
         ...data,
         history: [
@@ -137,16 +135,16 @@ function UserWeightProgress(props: any) {
         { weight: parseInt(weightHistory.weight), date: new Date() },
       ],
     }));
-    axios.post(
-      "https://localhost:7132/UserAccount/AddToWeightHistory",
-      weightHistory,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
+    axios.post(`${url}UserAccount/AddToWeightHistory`, weightHistory, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+    setWeightHistory((prevState: any) => ({
+      ...prevState,
+      weight: 0,
+    }));
   };
 
   return (

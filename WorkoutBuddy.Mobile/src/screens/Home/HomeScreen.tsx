@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation, route }) {
           source={require("../../../assets/gym.jpg")}
           alt="gym"
         />
-        <Flex top="-57%" w="35%" left={"33%"}>
+        <Flex top="-61%" w="35%" left={"33%"}>
           <Button
             variant={"solid"}
             bgColor={"#DCA950"}
@@ -67,7 +67,6 @@ export default function HomeScreen({ navigation, route }) {
         bgColor={"#F1F2EB"}
         borderRadius={"3xl"}
         top="-60"
-        pt="5"
         px="5"
       >
         <FeatureList

@@ -72,21 +72,18 @@ namespace Backend.WebApp.Controllers
             return Ok(isDeleted);
         }
 
-        /*[HttpPost]
-        public IActionResult AddToUserSplits([FromBody] string id)
+        [HttpPost("addToUserSplits")]
+        public IActionResult AddToUserSplits([FromBody] AddToUserSplitControllerModel model)
         {
-            var splitId = Guid.Parse(id);
-            var isValid = service.AddToUserSplits(splitId, CurrentUser.Id);
-            if (isValid)
-            {
-                return Json(new { message = "Split successfully added to your colection!" });
-            }
-            else
-            {
-                return Json(new { message = "The split is already in your colection!" });
-            }
+            var splitId = Guid.Parse(model.id);
+            return Ok(service.AddToUserSplits(splitId, CurrentUser.Id));
         }
-*/
+
+        public class AddToUserSplitControllerModel
+        {
+            public string id { get; set; }
+        }
 
     }
 }
+

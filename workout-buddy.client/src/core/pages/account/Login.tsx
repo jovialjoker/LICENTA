@@ -16,6 +16,7 @@ import { useState } from "react";
 import { accountActions } from "../../../store/reducers/account";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { url } from "../../../env";
 
 const loginModelInitialState = {
   email: "",
@@ -36,7 +37,7 @@ export default function Login() {
     try {
       const res = await axios({
         method: "post",
-        url: "https://localhost:7132/UserAccount/login",
+        url: `${url}UserAccount/login`,
         data: loginModel,
       });
       dispatcher(accountActions.login(res.data));

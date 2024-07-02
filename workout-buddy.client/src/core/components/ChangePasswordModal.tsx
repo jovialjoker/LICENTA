@@ -18,6 +18,7 @@ import {
 import React, { useState } from "react";
 import AuthHeader from "../../utils/authorizationHeaders";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { url } from "../../env";
 
 interface IChangePasswordModalProps {
   isOpen: boolean;
@@ -54,17 +55,14 @@ function ChangePasswordModal({ isOpen, onClose }: IChangePasswordModalProps) {
     }
 
     const resetPassword = async () => {
-      const res = await fetch(
-        "https://localhost:7132/UserAccount/changePassword",
-        {
-          method: "POST",
-          body: JSON.stringify(form),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const res = await fetch(`${url}UserAccount/changePassword`, {
+        method: "POST",
+        body: JSON.stringify(form),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
       if (res.status === 200) {
         onClose();
       }

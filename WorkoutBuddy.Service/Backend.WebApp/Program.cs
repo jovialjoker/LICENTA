@@ -58,7 +58,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", p =>
 {
-    p.WithOrigins("https://localhost:3000/", "https://localhost:7132/")
+    p.WithOrigins("https://localhost:3000/", "https://localhost:7132/", "https://workoutbuddylicenta.azurewebsites.net/", "https://licenta-3f6c8.web.app/", "https://licenta-3f6c8.firebaseapp.com/")
     .AllowAnyOrigin()
         .SetIsOriginAllowedToAllowWildcardSubdomains()
         .AllowAnyHeader()

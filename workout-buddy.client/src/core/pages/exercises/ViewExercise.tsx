@@ -19,6 +19,7 @@ import {
 import AuthHeader from "../../../utils/authorizationHeaders";
 import useColors from "./useColors";
 import BackButton from "../../components/BackButton";
+import { url } from "../../../env";
 
 export default function ViewExercise() {
   const colors = useColors();
@@ -28,7 +29,7 @@ export default function ViewExercise() {
     const getExercise = async (id: string) => {
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/Exercises/view?id=${id}`,
+        url: `${url}Exercises/view?id=${id}`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -52,7 +53,7 @@ export default function ViewExercise() {
           <Image
             rounded={"md"}
             alt={"product image"}
-            src={`https://localhost:7132/Image/getImageById?id=${exercise.idImage}`}
+            src={`${url}Image/getImageById?id=${exercise.idImage}`}
             fit={"cover"}
             align={"center"}
             w={"100%"}

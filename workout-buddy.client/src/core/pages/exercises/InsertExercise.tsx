@@ -16,6 +16,7 @@ import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import useColors from "./useColors";
+import { url } from "../../../env";
 
 interface ExerciseItem {
   value: string;
@@ -62,7 +63,7 @@ export default function InsertExercise() {
     const getExercise = async () => {
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/Exercises/getExerciseForInsert?id=${
+        url: `${url}Exercises/getExerciseForInsert?id=${
           id ?? "00000000-0000-0000-0000-000000000000"
         }`,
         headers: {
@@ -105,7 +106,7 @@ export default function InsertExercise() {
     try {
       await axios({
         method: "post",
-        url: `https://localhost:7132/Exercises/insertExercise${querryString}`,
+        url: `${url}Exercises/insertExercise${querryString}`,
         data: formData,
         headers: {
           Authorization: AuthHeader(),

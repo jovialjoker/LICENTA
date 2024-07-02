@@ -5,7 +5,8 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  VisuallyHidden, VStack,
+  VisuallyHidden,
+  VStack,
 } from "@chakra-ui/react";
 import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { ReactNode } from "react";
@@ -45,7 +46,7 @@ const SocialButton = ({
 export default function Footer() {
   return (
     <Box
-        mt={"auto"}
+      mt={"auto"}
       bg={useColorModeValue(
         "lightPallette.background.main",
         "darkPallette.background.main"
@@ -62,9 +63,11 @@ export default function Footer() {
           justify={{ base: "center", md: "space-between" }}
           align={{ base: "center", md: "center" }}
         >
-          <VStack alignItems={"start"}><Text>Contact: 0774552300</Text>
-            <Text>Email: personal_stuff@workoutbuddy.com</Text></VStack>
-          <Text>© 2022 Chakra Templates. All rights reserved</Text>
+          <VStack alignItems={"start"}>
+            <Text>Contact: 0774552300</Text>
+            <Text>Email: personal_stuff@workoutbuddy.com</Text>
+          </VStack>
+          <Text>© 2024 Florea George</Text>
           <Stack direction={"row"} spacing={6}>
             <SocialButton label={"Twitter"} href={"#"}>
               <FaTwitter />

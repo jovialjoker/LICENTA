@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import Select, { OptionsOrGroups } from "react-select";
 import axios from "axios";
 import AuthHeader from "../../../utils/authorizationHeaders";
+import { url } from "../../../env";
 
 interface IObjective {
   type: string;
@@ -86,7 +87,7 @@ const CaloriesCalculator = () => {
       const getWeight = async () => {
         const { data } = await axios({
           method: "get",
-          url: "https://localhost:7132/UserAccount/getCurrentWeight",
+          url: `${url}UserAccount/getCurrentWeight`,
           headers: {
             Authorization: AuthHeader(),
           },
@@ -124,6 +125,10 @@ const CaloriesCalculator = () => {
       ? calories + ((training || 0) + 3) * weight
       : calories;
     setCalories(calories.toFixed(0).toString());
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (

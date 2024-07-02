@@ -13,7 +13,7 @@ import {
   IconButton,
   CloseIcon,
 } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DumbellSvg from "../../svgComponents/DumbellSvg";
 import IAuthObject from "./interfaces/IAuthObject";
 import env from "../../utils/constants/env";
@@ -22,6 +22,12 @@ import AlertComponent from "./components/AlertComponent";
 import { endpoints } from "../../utils/constants/endpoints";
 
 const AuthScreen = ({ navigation, route }) => {
+  useEffect(() => {
+    setAuthObject({});
+    setIsSuccesfull(false);
+    setShowAlert(false);
+    setErrors([]);
+  }, [route.params?.refreshFlag]);
   const [authObject, setAuthObject] = useState({} as IAuthObject);
   const [isSuccessful, setIsSuccesfull] = useState(false);
   const [showAlert, setShowAlert] = useState(false);

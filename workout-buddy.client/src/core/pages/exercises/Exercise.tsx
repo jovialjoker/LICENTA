@@ -8,11 +8,19 @@ import {
   Image,
   GridItem,
   Button,
+  Modal,
+  ModalOverlay,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import axios from "axios";
+import { url } from "../../../env";
 
 interface IExerciseProps {
   exercise: any;
@@ -25,6 +33,7 @@ export default function Exercise({
   deleteHandler: deleteExercises,
   isStale,
 }: IExerciseProps) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -44,22 +53,15 @@ export default function Exercise({
   };
 
   const deleteHandler = async (exerciseId: number) => {
-    let res = window.confirm("Are you sure you want to delete this exercise?");
-    if (res) {
-      try {
-        await axios.post(
-          `https://localhost:7132/Exercises/delete`,
-          exerciseId,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: AuthHeader(),
-            },
-          }
-        );
-        deleteExercises(exerciseId);
-      } catch (err) {}
-    }
+    try {
+      await axios.post(`${url}Exercises/delete`, exerciseId, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: AuthHeader(),
+        },
+      });
+      deleteExercises(exerciseId);
+    } catch (err) {}
   };
 
   return (
@@ -94,7 +96,7 @@ export default function Exercise({
               pos: "absolute",
               top: 5,
               left: 0,
-              backgroundImage: `url(${`https://localhost:7132/Image/getImageById?id=${exercise.idImage}`})`,
+              backgroundImage: `url(${`${url}Image/getImageById?id=${exercise.idImage}`})`,
               filter: "blur(15px)",
               zIndex: -1,
             }}
@@ -110,7 +112,7 @@ export default function Exercise({
               height={230}
               width={282}
               objectFit={"cover"}
-              src={`https://localhost:7132/Image/getImageById?id=${exercise.idImage}`}
+              src={`${url}Image/getImageById?id=${exercise.idImage}`}
             />
           </Box>
           <Stack pt={10} align={"center"}>
@@ -173,7 +175,7 @@ export default function Exercise({
                   _focus={{
                     bg: "red.500",
                   }}
-                  onClick={() => deleteHandler(exercise.exerciseId)}
+                  onClick={onOpen}
                 >
                   Delete
                 </Button>
@@ -182,6 +184,28 @@ export default function Exercise({
           </Stack>
         </Box>
       </Center>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Text>Delete exercise</Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalFooter>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button
+              ml={2}
+              colorScheme={useColorModeValue(
+                "lightPallette.primary",
+                "darkPallette.primary"
+              )}
+              onClick={() => deleteHandler(exercise.exerciseId)}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </GridItem>
   );
 }

@@ -20,7 +20,7 @@ export default function MenuScreen({ navigation }) {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("currentUser");
     onClose();
-    navigation.navigate("Login");
+    navigation.navigate("Login", { refreshFlag: Date.now() });
   };
 
   return (

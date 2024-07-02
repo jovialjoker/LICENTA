@@ -43,11 +43,11 @@ const GoalsCarousel = ({ refresh }: { refresh: any }) => {
                   value={parseInt(
                     ((item.value * 100) / item.target).toString().split(".")[0]
                   )}
-                  radius={70}
+                  radius={60}
                   activeStrokeColor={"#DCA950"}
                   title={"%"}
                 />
-                <Heading size="md" mt="3">
+                <Heading size="md" mt="2">
                   {item.name}
                 </Heading>
                 <Text bold>

@@ -8,6 +8,7 @@ import useColors from "./colors";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import Wrapper from "../../layouts/ListWrapper";
 import LoadingSplitsList from "./LoadingSplitsList";
+import { url } from "../../../env";
 
 const SplitsList = lazy(() => import("./SplitsList"));
 
@@ -22,7 +23,7 @@ const SplitsWrapper = () => {
     const getSplits = async () => {
       const { data } = await axios({
         method: "get",
-        url: "https://localhost:7132/Split/getSplits",
+        url: `${url}Split/getSplits`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -34,7 +35,7 @@ const SplitsWrapper = () => {
 
   useEffect(() => {
     const getExercises = async () => {
-      const { data } = await axios.get("https://localhost:7132/Exercises/get", {
+      const { data } = await axios.get(`${url}Exercises/get`, {
         headers: {
           Authorization: AuthHeader(),
         },

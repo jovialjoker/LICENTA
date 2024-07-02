@@ -21,6 +21,7 @@ import { GrUserAdmin, GrUserNew } from "react-icons/all";
 import { DeleteIcon, UnlockIcon, LockIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import AuthHeader from "../../../utils/authorizationHeaders";
+import { url } from "../../../env";
 
 interface IUser {
   userId: string;
@@ -39,7 +40,7 @@ const UsersPage = () => {
       setLoading(true);
       const { data } = await axios({
         method: "get",
-        url: "https://localhost:7132/Admin/getAllUsers",
+        url: `${url}Admin/getAllUsers`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -56,7 +57,7 @@ const UsersPage = () => {
     let user = users.find((u) => u.userId == userId);
     if (user) {
       await axios.post(
-        `https://localhost:7132/UserAccount/MakeAdmin`,
+        `${url}UserAccount/MakeAdmin`,
         JSON.stringify({ id: userId, isAdmin: !user.isAdmin }),
         {
           headers: {
@@ -74,9 +75,7 @@ const UsersPage = () => {
     let user = users.find((u) => u.userId == userId);
     if (user) {
       await axios.post(
-        `https://localhost:7132/UserAccount/${
-          user.isDeleted ? "ActivateUser" : "DisableUser"
-        }`,
+        `${url}UserAccount/${user.isDeleted ? "ActivateUser" : "DisableUser"}`,
         userId,
         {
           headers: {

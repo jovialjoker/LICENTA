@@ -13,6 +13,7 @@ import axios from "axios";
 import { CloseIcon } from "@chakra-ui/icons";
 import { ISplit } from "./InsertSpit";
 import AuthHeader from "../../../utils/authorizationHeaders";
+import { url } from "../../../env";
 
 interface IWorkoutProps {
   index: number;
@@ -35,7 +36,7 @@ const Workout = (props: IWorkoutProps) => {
       }
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/Exercises/getExercisesByMuscleGroups${queryString}`,
+        url: `${url}Exercises/getExercisesByMuscleGroups${queryString}`,
         headers: {
           Authorization: AuthHeader(),
         },

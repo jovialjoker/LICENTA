@@ -26,6 +26,7 @@ import ListWrapper from "../../layouts/ListWrapper";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import SplitsSearchFilters from "../splits/SplitsSearchFilters";
 import useColors from "./useColors";
+import { url } from "../../../env";
 
 const ExercisesList = () => {
   const colors = useColors();
@@ -43,7 +44,7 @@ const ExercisesList = () => {
 
   useEffect(() => {
     const getExercises = async () => {
-      const { data } = await axios.get("https://localhost:7132/Exercises/get", {
+      const { data } = await axios.get(`${url}Exercises/get`, {
         headers: {
           Authorization: AuthHeader(),
         },
@@ -55,14 +56,11 @@ const ExercisesList = () => {
 
   useEffect(() => {
     const getMuscleGroups = async () => {
-      const { data } = await axios.get(
-        "https://localhost:7132/api/MuscleGroups",
-        {
-          headers: {
-            Authorization: AuthHeader(),
-          },
-        }
-      );
+      const { data } = await axios.get(`${url}api/MuscleGroups`, {
+        headers: {
+          Authorization: AuthHeader(),
+        },
+      });
       setMuscleGroups(data);
     };
     getMuscleGroups();
@@ -84,14 +82,14 @@ const ExercisesList = () => {
 
   const handleSubmitSearch = (input: string) => {
     setLoading(true);
-    const url = new URL("https://localhost:7132/Exercises/get");
+    const filterUrl = new URL(`${url}Exercises/get`);
     for (let group of selectedGroups) {
-      url.searchParams.append("muscleGroup", group.value.toString());
+      filterUrl.searchParams.append("muscleGroup", group.value.toString());
     }
-    url.searchParams.append("search", input);
-    console.log(url);
+    filterUrl.searchParams.append("search", input);
+    console.log(filterUrl);
     const getFilteredExercises = async () => {
-      const { data } = await axios.get(url.toString(), {
+      const { data } = await axios.get(filterUrl.toString(), {
         headers: {
           Authorization: AuthHeader(),
         },

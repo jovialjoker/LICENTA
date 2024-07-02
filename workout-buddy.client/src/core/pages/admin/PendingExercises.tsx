@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ExerciseCard } from "../../components/ExerciseCard";
 import ListWrapper from "../../layouts/ListWrapper";
 import { Box, Flex, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { url } from "../../../env";
 
 function PendingExercises() {
   const [exercises, setExercises] = useState([]);
@@ -20,14 +21,11 @@ function PendingExercises() {
   useEffect(() => {
     const getExercises = async () => {
       try {
-        const result = await axios.get(
-          "https://localhost:7132/Admin/getPendingExercises",
-          {
-            headers: {
-              Authorization: AuthHeader(),
-            },
-          }
-        );
+        const result = await axios.get(`${url}Admin/getPendingExercises`, {
+          headers: {
+            Authorization: AuthHeader(),
+          },
+        });
         const data = result.data;
         setExercises(data);
       } catch (error: any) {}

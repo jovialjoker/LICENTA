@@ -520,6 +520,7 @@ namespace Backend.BusinessLogic.Implementation.UserSplitColection
                         workoutCoef += coef;
                     }
                     exercise.UserExerciseSets = sets;
+                    exercise.SetsNo= sets.Count;
                     exercises.Add(exercise);
                 }
 

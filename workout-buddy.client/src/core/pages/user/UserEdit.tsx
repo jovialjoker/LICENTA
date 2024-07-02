@@ -6,6 +6,7 @@ import AuthHeader from "../../../utils/authorizationHeaders";
 import "react-datepicker/dist/react-datepicker.css";
 import UserProfile from "./components/UserProfile";
 import UserWeightProgress from "./components/UserWeightProgress";
+import { url } from "../../../env";
 
 const EditUserPage = () => {
   const [loading, setLoading] = useState(false);
@@ -21,14 +22,11 @@ const EditUserPage = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const { data } = await axios.get(
-          "https://localhost:7132/UserAccount/profilePage",
-          {
-            headers: {
-              Authorization: AuthHeader(),
-            },
-          }
-        );
+        const { data } = await axios.get(`${url}UserAccount/profilePage`, {
+          headers: {
+            Authorization: AuthHeader(),
+          },
+        });
         setUser({ ...data });
       } catch (e) {
         console.log(e);

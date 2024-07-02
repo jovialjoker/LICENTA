@@ -21,6 +21,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ import Comments from "../comments/Comments";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import useColors from "./colors";
 import BackButton from "../../components/BackButton";
+import { url } from "../../../env";
 
 interface ISplit {
   workouts: {
@@ -44,6 +46,7 @@ interface ISplit {
 }
 
 const ViewSplit = () => {
+  const toast = useToast();
   const colors = useColors();
   const [split, setSplit] = useState<ISplit>({
     workouts: [],
@@ -61,7 +64,7 @@ const ViewSplit = () => {
     const getSplit = async (id: string) => {
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/Split/viewSplit?id=${id}`,
+        url: `${url}Split/viewSplit?id=${id}`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -83,7 +86,7 @@ const ViewSplit = () => {
 
     await axios({
       method: "post",
-      url: `https://localhost:7132/Comment/add`,
+      url: `${url}Comment/add`,
       data: newComment,
       headers: {
         Authorization: AuthHeader(),
@@ -93,22 +96,54 @@ const ViewSplit = () => {
     setCommentText("");
   };
 
+  const addToCollectionHandler = async () => {
+    const id = getURLID(window.location.href);
+    await axios({
+      method: "post",
+      url: `${url}Split/addToUserSplits`,
+      data: { id },
+      headers: {
+        Authorization: AuthHeader(),
+      },
+    });
+    toast({
+      title: "Success",
+      description: "Youve added successfully to your split",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Container maxW="7xl">
       <BackButton />
       <Grid templateColumns={"repeat(5, 1fr)"} py="3rem" gap={8}>
         <GridItem colSpan={3}>
-          <Box as={"header"}>
-            <Heading
-              lineHeight={1.1}
-              fontWeight={600}
-              fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
-            >
-              {split.name}
-            </Heading>
-            <Text fontWeight={600} color={"gray.500"} size="sm" mb={4}>
-              @{split.creatorName}
-            </Text>
+          <Box
+            as={"header"}
+            display={"flex"}
+            flexDir={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Box>
+              <Heading
+                lineHeight={1.1}
+                fontWeight={600}
+                fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
+              >
+                {split.name}
+              </Heading>
+              <Text fontWeight={600} color={"gray.500"} size="sm" mb={4}>
+                @{split.creatorName}
+              </Text>
+            </Box>
+            <Box>
+              <Button onClick={addToCollectionHandler}>
+                Add to collection
+              </Button>
+            </Box>
           </Box>
 
           <Stack spacing={{ base: 4, sm: 6 }} direction={"column"}>

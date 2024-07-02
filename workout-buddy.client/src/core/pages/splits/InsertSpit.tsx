@@ -18,6 +18,7 @@ import Workout from "./Workout";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import useColors from "./colors";
 import { FaPlus } from "react-icons/all";
+import { url } from "../../../env";
 
 export interface ISplit {
   splitId: string;
@@ -79,7 +80,7 @@ export default function InsertSplit() {
     const getSplit = async () => {
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/Split/getInsertModel?id=${
+        url: `${url}Split/getInsertModel?id=${
           id ?? "00000000-0000-0000-0000-000000000000"
         }`,
         headers: {
@@ -135,9 +136,7 @@ export default function InsertSplit() {
     try {
       await axios({
         method: "post",
-        url: `https://localhost:7132/Split/${
-          id ? "editSplit" : "insertSplit"
-        }${querryString}`,
+        url: `${url}Split/${id ? "editSplit" : "insertSplit"}${querryString}`,
         data: formData,
         headers: {
           Authorization: AuthHeader(),

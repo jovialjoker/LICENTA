@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import useColors from "./colors";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import axios from "axios";
+import { url } from "../../../env";
 
 interface ISplitCardProps {
   split: any;
@@ -56,16 +57,12 @@ export default function SplitCard({ split }: ISplitCardProps) {
   };
 
   const onDelete = async () => {
-    await axios.post(
-      `https://localhost:7132/Split/deleteSplit`,
-      selectedSplitId,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: AuthHeader(),
-        },
-      }
-    );
+    await axios.post(`${url}Split/deleteSplit`, selectedSplitId, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: AuthHeader(),
+      },
+    });
     onClose();
     window.location.reload();
   };

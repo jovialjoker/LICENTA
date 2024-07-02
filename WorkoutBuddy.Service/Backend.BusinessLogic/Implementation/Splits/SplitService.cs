@@ -477,6 +477,47 @@ namespace Backend.BusinessLogic.Splits
             return ok;
         }
 
+        public bool AddToUserSplits(Guid SplitId, Guid UserId)
+        {
+            var isValid = true;
+            ExecuteInTransaction(uow =>
+            {
+                var split = uow.Splits.Get()
+                            .FirstOrDefault(s => s.Idsplit == SplitId);
+                var user = uow.Users.Get()
+                            .Include(u => u.UserSplits)
+                            .FirstOrDefault(u => u.Iduser == UserId);
+
+                if (split == null)
+                {
+                    throw new NotFoundErrorException("the split does not exist!");
+                }
+
+                if (user == null)
+                {
+                    throw new NotFoundErrorException("the user does not exist!");
+                }
+
+                if (!user.UserSplits.Any(us => us.Idsplit == split.Idsplit))
+                {
+                    user.UserSplits.Add(new UserSplit()
+                    {
+                        Idsplit = split.Idsplit,
+                        IdsplitNavigation = split,
+                        Iduser = user.Iduser,
+                        IduserNavigation = user
+                    });
+                    uow.Users.Update(user);
+                    uow.SaveChanges();
+                }
+                else
+                {
+                    isValid = false;
+                }
+            });
+            return isValid;
+        }
+
 
         //add split async 
         /*public async Task AddSplit(SplitModel model)
@@ -616,45 +657,6 @@ namespace Backend.BusinessLogic.Splits
                 
 
 
-                public bool AddToUserSplits(Guid SplitId, Guid UserId)
-                {
-                    var isValid = true;
-                    ExecuteInTransaction(uow =>
-                    {
-                        var split = uow.Splits.Get()
-                                    .FirstOrDefault(s => s.Idsplit == SplitId);
-                        var user = uow.Users.Get()
-                                    .Include(u => u.UserSplits)
-                                    .FirstOrDefault(u => u.Iduser == UserId);
-
-                        if (split == null)
-                        {
-                            throw new NotFoundErrorException("the split does not exist!");
-                        }
-
-                        if (user == null)
-                        {
-                            throw new NotFoundErrorException("the user does not exist!");
-                        }
-
-                        if (!user.UserSplits.Any(us => us.Idsplit == split.Idsplit))
-                        {
-                            user.UserSplits.Add(new UserSplit()
-                            {
-                                Idsplit = split.Idsplit,
-                                IdsplitNavigation = split,
-                                Iduser = user.Iduser,
-                                IduserNavigation = user
-                            });
-                            uow.Users.Update(user);
-                            uow.SaveChanges();
-                        }
-                        else
-                        {
-                            isValid = false;
-                        }
-                    });
-                    return isValid;
-                }*/
+                */
     }
 }

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { accountActions } from "../../../../store/reducers/account";
 import AuthHeader from "../../../../utils/authorizationHeaders";
 import { useState } from "react";
+import { url } from "../../../../env";
 
 function UserProfile(props: any) {
   const [isEditting, setIsEditting] = useState(false);
@@ -25,7 +26,7 @@ function UserProfile(props: any) {
     props.setLoading(true);
     try {
       await axios.post(
-        "https://localhost:7132/UserAccount/editProfile",
+        `${url}UserAccount/editProfile`,
         {
           username: props.user.username,
           name: props.user.name,

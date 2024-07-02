@@ -16,6 +16,7 @@ import AuthHeader from "../../../utils/authorizationHeaders";
 import { getURLID } from "../../../utils/URLUtils";
 import UserExerciseComponent from "./UserExerciseComponent";
 import useColors from "../splits/colors";
+import { url } from "../../../env";
 
 export interface IProgressSet {
   reps: number | null;
@@ -59,7 +60,7 @@ const AddProgress = () => {
     const getExercise = async () => {
       const { data } = await axios({
         method: "get",
-        url: `https://localhost:7132/UserSplit/AddProgress?id=${id}`,
+        url: `${url}UserSplit/AddProgress?id=${id}`,
         headers: {
           Authorization: AuthHeader(),
         },
@@ -82,7 +83,7 @@ const AddProgress = () => {
     e.preventDefault();
     await axios({
       method: "post",
-      url: `https://localhost:7132/UserSplit/AddProgress`,
+      url: `${url}UserSplit/AddProgress`,
       data: progressModel,
       headers: {
         Authorization: AuthHeader(),

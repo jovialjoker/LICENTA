@@ -20,14 +20,15 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useDispatch } from "react-redux";
 import { accountActions } from "../../../store/reducers/account";
 import axios from "axios";
+import { url } from "../../../env";
 
 const registerModelInitialState = {
   name: "",
   username: "",
   email: "",
   passwordString: "",
-  birthDay: "",
-  weight: 7,
+  birthDay: new Date().toISOString(),
+  weight: 0,
 };
 
 export default function Register() {
@@ -45,7 +46,7 @@ export default function Register() {
     try {
       const res = await axios({
         method: "post",
-        url: "https://localhost:7132/UserAccount/register",
+        url: `${url}UserAccount/register`,
         data: registerModel,
       });
 
@@ -56,6 +57,7 @@ export default function Register() {
       const { data } = e.response;
       console.log(data);
       setAuthError(data);
+      debugger;
     }
   };
 

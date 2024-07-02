@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AuthHeader from "../../../utils/authorizationHeaders";
 import axios from "axios";
 import UserSplitCard from "./UserSplitCard";
+import { url } from "../../../env";
 
 export interface ISplitViewModel {
   splitId: string;
@@ -24,7 +25,7 @@ const UserSplitsList = () => {
     const getSplits = async () => {
       const { data } = await axios({
         method: "get",
-        url: "https://localhost:7132/UserSplit/ListOfSplits",
+        url: `${url}UserSplit/ListOfSplits`,
         headers: {
           Authorization: AuthHeader(),
         },

@@ -18,6 +18,7 @@ import UserWorkoutCard from "./UserWorkoutCard";
 import { useNavigate } from "react-router-dom";
 import ExerciseProgress from "./ExerciseProgress";
 import { IProgressSet } from "./AddProgress";
+import { url } from "../../../env";
 
 export interface IExerciseDay {
   date: Date;
@@ -42,7 +43,7 @@ const ViewExerciseProgress = () => {
       const id = getURLID(window.location.href);
       debugger;
       const { data } = await axios.get(
-        "https://localhost:7132/UserSplit/GetExercisesProgress?id=" + id,
+        `${url}UserSplit/GetExercisesProgress?id=` + id,
         {
           headers: {
             Authorization: AuthHeader(),
